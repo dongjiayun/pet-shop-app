@@ -1,0 +1,14 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.json",
+  "compilerOptions": {
+    "sourceMap": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+        "@vant/weapp/*": ["/node_modules/@vant/weapp/dist/*"]
+    },
+    "lib": ["esnext", "dom"],
+    "types": ["miniprogram-api-typings"]
+  },
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
+}

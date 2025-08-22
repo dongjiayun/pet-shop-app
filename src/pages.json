@@ -1,0 +1,56 @@
+{
+    "easycom": {
+        "autoscan": true,
+        "custom": {
+            "^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue"
+        }
+    },
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index"
+		},
+        {
+            "path": "pages/mine/index"
+        }
+	],
+    "subPackages": [
+        {
+            "root": "pages/auth",
+            "pages":[
+                {
+                    "path": "signin"
+                },
+                {
+                    "path": "signup"
+                },
+                {
+                    "path": "resetPassword"
+                }
+            ]
+        }
+    ],
+    "tabBar": {
+        "backgroundColor": "#FFFFFF",
+        "borderStyle": "white",
+        "color": "#666666",
+        "selectedColor": "#FF7391",
+        "list": [
+            {
+                "pagePath": "pages/index/index",
+                "text": "首页",
+                "iconPath": "static/tabbar/homeicon1_.png",
+                "selectedIconPath": "static/tabbar/homeicon1.png"
+            },
+            {
+                "pagePath": "pages/mine/index",
+                "text": "个人中心",
+                "iconPath": "static/tabbar/homeicon2_.png",
+                "selectedIconPath": "static/tabbar/homeicon2.png"
+            }
+        ]
+    },
+	"globalStyle": {
+        "navigationStyle": "custom",
+		"backgroundColor": "#F8F8F8"
+	}
+},
