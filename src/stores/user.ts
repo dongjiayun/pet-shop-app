@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { Local } from "@/utils/storage";
-import { AuthModel } from "@/api/index";
+import { AuthModel, UserModel } from "@/api/index";
 import { reLaunch, switchTab } from "@/router/router";
 
 interface User {
@@ -29,11 +29,24 @@ export const useUserStore = defineStore("user", {
         role: 0,
     }),
     actions: {
+        getUserInfo() {
+            return UserModel.getUser().then((res) => {
+                if (res.status !== 0) {
+                    uni.showToast({
+                        title: res.message,
+                        icon: "none",
+                    });
+                    Promise.reject(new Error(res.message));
+                } else {
+                    this.setUserInfo(res.data);
+                }
+            });
+        },
         setUserInfo(data?: Partial<User>) {
             if (data) {
                 Object.assign(this, data);
             } else {
-                const userInfoCache = Local.get("userinfo") as Partial<User> | null;
+                const userInfoCache = Local.get("userInfo") as Partial<User> | null;
                 if (userInfoCache) {
                     this.token = userInfoCache.token || "";
                     this.refreshToken = userInfoCache.refreshToken || "";

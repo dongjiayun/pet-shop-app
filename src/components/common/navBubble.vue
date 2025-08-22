@@ -26,8 +26,9 @@ const handleHome = () => {
 
 <style scoped lang="scss">
 .nav-bubble {
-    position: relative;
-    top: calc(var(--status-bar-height) + 50rpx);
+    position: absolute;
+    bottom: 0;
+    left: 0;
     margin-left: 30rpx;
     width: 100rpx;
     height: 40rpx;

@@ -44,8 +44,11 @@ export const request = <T = any>(
     config?: RequestConfig
 ): Promise<T> => {
     let url = baseUrl + apiUrl;
+    const store = useUserStore();
     const header: Record<string, string> = {
         "Content-Type": "application/json",
+        Authorization: store.token,
+        "Refresh-Token": store.refreshToken,
     };
 
     // 处理 GET 请求参数

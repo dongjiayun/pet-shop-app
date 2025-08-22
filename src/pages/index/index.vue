@@ -1,18 +1,33 @@
 <template>
     <home-container class="home">
-        <view class="home-item">
-            <image class="home-item-icon" src="@/assets/pages/icon2.png"></image>
-            <view class="home-item-title">搜索宠物</view>
+        <view v-if="isEmployee">
+            <view class="home-item">
+                <image class="home-item-icon" src="@/assets/pages/icon2.png"></image>
+                <view class="home-item-title">搜索宠物</view>
+            </view>
+            <view class="home-item">
+                <image class="home-item-icon" src="@/assets/pages/icon3.png"></image>
+                <view class="home-item-title">添加宠物</view>
+            </view>
         </view>
-        <view class="home-item">
-            <image class="home-item-icon" src="@/assets/pages/icon3.png"></image>
-            <view class="home-item-title">添加宠物</view>
+        <view v-else>
+            <view class="home-no-access"> 您没有权限访问,请联系管理员 </view>
         </view>
     </home-container>
 </template>
 
 <script setup lang="ts">
 import homeContainer from "@/components/pages/homeContainer.vue";
+import { useUserStore } from "@/stores/user";
+import { ref, computed } from "vue";
+
+const store = useUserStore();
+
+console.log(store.role);
+
+const isEmployee = computed(() => {
+    return [1, 2, 3].includes(store.role);
+});
 </script>
 
 <style lang="scss" scoped>
@@ -47,6 +62,23 @@ import homeContainer from "@/components/pages/homeContainer.vue";
     }
     &-item + &-item {
         margin-top: 40rpx;
+    }
+    &-no-access {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40rpx;
+        backdrop-filter: blur(8rpx);
+        background: #ffffffb2;
+        border-radius: 20rpx;
+        font-family: PingFang SC;
+        font-weight: 500;
+        font-style: Medium;
+        font-size: 32rpx;
+        leading-trim: NONE;
+        line-height: 100%;
+        letter-spacing: 0%;
+        color: #5b4045;
     }
 }
 </style>

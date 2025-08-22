@@ -9,10 +9,13 @@ onLaunch(() => {
 onShow(() => {
     console.log("App Show");
     const store = useUserStore();
+    store.setUserInfo();
     if (!store.token) {
         reLaunch({
             name: "signin",
         });
+    } else {
+        store.getUserInfo();
     }
 });
 onHide(() => {
