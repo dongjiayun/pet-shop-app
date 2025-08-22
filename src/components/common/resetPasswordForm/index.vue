@@ -155,9 +155,8 @@ const sendVerificationCode = async () => {
     // 启动倒计时
     startCountdown(60);
 
-    AuthModel.resetPasswordByOtp({
+    AuthModel.sendResetEmailOtp({
         email: form.value.account,
-        password: form.value.password,
     }).then((data) => {
         if (data.status === 0) {
             ticket.value = data.data;
@@ -181,13 +180,7 @@ const startCountdown = (seconds: number) => {
 
 // 登录验证
 const handleSubmit = () => {
-    formRef.value.validate((err) => {
-        if (err) {
-            return uni.showToast({
-                title: err[0].errorMessage,
-                icon: "none",
-            });
-        }
+    formRef.value.validate().then(() => {
         emit("submit", {
             email: form.value.account,
             password: form.value.password,

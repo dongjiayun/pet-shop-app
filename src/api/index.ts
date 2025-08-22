@@ -21,6 +21,9 @@ export const AuthModel: ApiModel = {
     sendSignupEmailOtp(data) {
         return post("/auth/sendSignupEmailOtp", data);
     },
+    sendResetEmailOtp(data) {
+        return post("/auth/sendResetEmailOtp", data);
+    },
     resetPassword(data) {
         return post("/auth/resetPassword", data);
     },

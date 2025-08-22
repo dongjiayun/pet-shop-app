@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { Local } from "@/utils/storage";
 import { AuthModel } from "@/api/index";
-import { reLaunch } from "@/router/router";
+import { reLaunch, switchTab } from "@/router/router";
 
 interface User {
     token: string;
@@ -71,7 +71,7 @@ export const useUserStore = defineStore("user", {
                     mask: true,
                 });
                 return AuthModel.login(param).then((res) => {
-                    if (res.status !== 200) {
+                    if (res.status !== 0) {
                         uni.hideLoading();
                         uni.showToast({
                             title: res.message,
@@ -92,7 +92,7 @@ export const useUserStore = defineStore("user", {
                     });
                     this.setUserInfo(this.$state);
                     uni.hideLoading();
-                    reLaunch({
+                    switchTab({
                         name: "home",
                     });
                 });
