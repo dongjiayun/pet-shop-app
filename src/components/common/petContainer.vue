@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import petNavbar from "../common/petNavbar.vue";
+import bottomButton from "@/components/common/bottomButton.vue";
 import { onMounted, ref } from "vue";
 const props = defineProps({
     title: {
@@ -14,6 +15,7 @@ const props = defineProps({
         type: String,
         default: "",
     },
+    bottomButtonName: String,
 });
 
 const visible = ref(false);
@@ -21,19 +23,30 @@ const visible = ref(false);
 onMounted(() => {
     visible.value = true;
 });
+
+const emit = defineEmits(["submit"]);
+
+const handleSubmit = () => {
+    emit("submit");
+};
 </script>
 
 <template>
-    <view class="container">
+    <view class="pet-container">
         <pet-navbar :title="props.title" :navBarColor="props.navBarColor"></pet-navbar>
-        <view class="container-main" :class="{ active: visible }">
+        <view class="pet-container-main" :class="{ active: visible }">
             <slot></slot>
         </view>
+        <bottom-button
+            v-if="props.bottomButtonName"
+            :label="props.bottomButtonName"
+            @submit="handleSubmit"
+        ></bottom-button>
     </view>
 </template>
 
 <style lang="scss" scoped>
-.container {
+.pet-container {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -45,6 +58,7 @@ onMounted(() => {
         transform: translateY(-20px);
         transition: all 0.5s ease-out;
         width: 750rpx;
+        padding: 40rpx;
         &.active {
             opacity: 1;
             transform: translateY(0);

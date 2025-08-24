@@ -39,6 +39,7 @@ export const useUserStore = defineStore("user", {
                     Promise.reject(new Error(res.message));
                 } else {
                     this.setUserInfo(res.data);
+                    return res.data;
                 }
             });
         },
@@ -105,6 +106,12 @@ export const useUserStore = defineStore("user", {
                     });
                     this.setUserInfo(this.$state);
                     uni.hideLoading();
+                    setTimeout(() => {
+                        uni.showToast({
+                            title: `欢迎回来,${this.username}`,
+                            icon: "none",
+                        });
+                    }, 1000);
                     switchTab({
                         name: "home",
                     });

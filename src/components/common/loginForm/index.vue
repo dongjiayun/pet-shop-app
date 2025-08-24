@@ -128,7 +128,7 @@ const emit = defineEmits(["login", "forgetPwd", "toReg", "moreLogin"]);
 </script>
 
 <style lang="scss" scoped>
-@import "./index.scss";
+@use "./index.scss";
 
 @media screen and (min-width: 690px) {
     .uni-content {

@@ -195,7 +195,7 @@ const emit = defineEmits(["submit"]);
 </script>
 
 <style lang="scss" scoped>
-@import "./index.scss";
+@use "./index.scss";
 /* 保留原始样式基础上新增 */
 .login-container {
     padding: 40rpx 20rpx 0;

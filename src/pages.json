@@ -10,7 +10,7 @@
 			"path": "pages/index/index"
 		},
         {
-            "path": "pages/mine/index"
+            "path": "pages/index/mine"
         }
 	],
     "subPackages": [
@@ -27,10 +27,18 @@
                     "path": "resetPassword"
                 }
             ]
+        },
+        {
+            "root": "pages/mine",
+            "pages":[
+                {
+                    "path": "editNickname"
+                }
+            ]
         }
     ],
     "tabBar": {
-        "backgroundColor": "#FFFFFF",
+        "backgroundColor": "#FFF5F8",
         "borderStyle": "white",
         "color": "#666666",
         "selectedColor": "#FF7391",
@@ -42,7 +50,7 @@
                 "selectedIconPath": "static/tabbar/homeicon1.png"
             },
             {
-                "pagePath": "pages/mine/index",
+                "pagePath": "pages/index/mine",
                 "text": "个人中心",
                 "iconPath": "static/tabbar/homeicon2_.png",
                 "selectedIconPath": "static/tabbar/homeicon2.png"
@@ -52,5 +60,16 @@
 	"globalStyle": {
         "navigationStyle": "custom",
 		"backgroundColor": "#F8F8F8"
-	}
-},
+	},
+    "condition": {
+        "current": 0,
+        "list": [
+            {
+                "name": "修改昵称",
+                "path": "pages/mine/editNickname"
+            }
+        ]
+    }
+}
+
+

@@ -15,6 +15,13 @@ const base: Routes = [
         name: "home",
     },
     {
+        path: "/pages/index/index",
+        name: "mine",
+    },
+];
+
+const auth: Routes = [
+    {
         path: "/pages/auth/signin",
         name: "signin",
     },
@@ -28,7 +35,14 @@ const base: Routes = [
     },
 ];
 
-const routes: Route[] = [...base];
+const mine: Routes = [
+    {
+        path: "/pages/mine/editNickname",
+        name: "editNickname",
+    },
+];
+
+const routes: Route[] = [...base, ...auth, ...mine];
 
 export { routes };
 export type { Route, Routes };

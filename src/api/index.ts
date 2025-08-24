@@ -1,4 +1,4 @@
-import { post, get } from "@/utils/http";
+import { post, get, put } from "@/utils/http";
 import { useUserStore } from "@/stores/user";
 
 interface ApiModel {
@@ -39,5 +39,9 @@ export const UserModel: ApiModel = {
     getUser() {
         const store = useUserStore();
         return get("/user/" + store.cid);
+    },
+    updateUserInfo(data) {
+        const store = useUserStore();
+        return put("/user/", { cid: store.cid, ...data });
     },
 };
