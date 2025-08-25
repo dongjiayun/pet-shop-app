@@ -172,7 +172,8 @@ export class Loading {
 }
 
 export const getSrc = (src: string): string => {
-    return new URL(`../assets/${src}`, import.meta.url).href;
+    // 使用 require 动态加载，注意路径需基于项目结构
+    return require(`../assets/${src}`);
 };
 
 const areaList: any = {

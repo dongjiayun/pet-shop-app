@@ -42,7 +42,18 @@ const mine: Routes = [
     },
 ];
 
-const routes: Route[] = [...base, ...auth, ...mine];
+const pet: Routes = [
+    {
+        path: "/pages/pet/index",
+        name: "petList",
+    },
+    {
+        path: "/pages/pet/create",
+        name: "createPet",
+    },
+];
+
+const routes: Route[] = [...base, ...auth, ...mine, ...pet];
 
 export { routes };
 export type { Route, Routes };

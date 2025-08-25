@@ -6,6 +6,10 @@ const props = defineProps({
         type: String,
         default: "修改",
     },
+    type: {
+        type: String,
+        default: "pick",
+    },
 });
 
 const handleSubmit = () => {
@@ -16,8 +20,8 @@ const emit = defineEmits(["submit"]);
 </script>
 
 <template>
-    <view class="bottom-button">
-        <submit-button @click="handleSubmit">{{ props.label }}</submit-button>
+    <view class="bottom-button" :class="props.type">
+        <submit-button @click="handleSubmit" :type="props.type">{{ props.label }}</submit-button>
     </view>
 </template>
 
@@ -28,9 +32,20 @@ const emit = defineEmits(["submit"]);
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ffecf5;
-    z-index: 100;
+    z-index: 1;
     padding: 32rpx;
     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+    &.pick {
+        background-color: #ffecf5;
+    }
+    &.red {
+        background-color: #fffbfa;
+    }
+    &.blue {
+        background-color: #96e4ff;
+    }
+    &.yellow {
+        background-color: #fffce0;
+    }
 }
 </style>

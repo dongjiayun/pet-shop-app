@@ -35,6 +35,17 @@
                     "path": "editNickname"
                 }
             ]
+        },
+        {
+            "root": "pages/pet",
+            "pages":[
+                {
+                    "path": "index"
+                },
+                {
+                    "path": "create"
+                }
+            ]
         }
     ],
     "tabBar": {
@@ -67,6 +78,10 @@
             {
                 "name": "修改昵称",
                 "path": "pages/mine/editNickname"
+            },
+            {
+                "name": "添加宠物",
+                "path": "pages/pet/create"
             }
         ]
     }

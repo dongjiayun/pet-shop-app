@@ -1,11 +1,11 @@
 <template>
     <home-container class="home">
         <view v-if="isEmployee">
-            <view class="home-item">
+            <view class="home-item" @click="handleSearchPet">
                 <image class="home-item-icon" src="@/assets/pages/icon2.png"></image>
                 <view class="home-item-title">搜索宠物</view>
             </view>
-            <view class="home-item">
+            <view class="home-item" @click="handleAddPet">
                 <image class="home-item-icon" src="@/assets/pages/icon3.png"></image>
                 <view class="home-item-title">添加宠物</view>
             </view>
@@ -19,15 +19,26 @@
 <script setup lang="ts">
 import homeContainer from "@/components/pages/homeContainer.vue";
 import { useUserStore } from "@/stores/user";
-import { ref, computed } from "vue";
+import { computed } from "vue";
+import { push } from "@/router/router";
 
 const store = useUserStore();
-
-console.log(store.role);
 
 const isEmployee = computed(() => {
     return [1, 2, 3].includes(store.role);
 });
+
+const handleSearchPet = () => {
+    push({
+        name: "petList",
+    });
+};
+
+const handleAddPet = () => {
+    push({
+        name: "createPet",
+    });
+};
 </script>
 
 <style lang="scss" scoped>

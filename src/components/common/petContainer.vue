@@ -16,6 +16,10 @@ const props = defineProps({
         default: "",
     },
     bottomButtonName: String,
+    bottomButtonType: {
+        type: String,
+        default: "pick",
+    },
 });
 
 const visible = ref(false);
@@ -40,6 +44,7 @@ const handleSubmit = () => {
         <bottom-button
             v-if="props.bottomButtonName"
             :label="props.bottomButtonName"
+            :type="props.bottomButtonType"
             @submit="handleSubmit"
         ></bottom-button>
     </view>

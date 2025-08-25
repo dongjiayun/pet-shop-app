@@ -1,7 +1,14 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const props = defineProps({
+    type: {
+        type: String,
+        default: "pick",
+    },
+});
+</script>
 
 <template>
-    <view class="submit-button" @click="$emit('click')">
+    <view class="submit-button" :class="props.type" @click="$emit('click')">
         <slot></slot>
     </view>
 </template>
@@ -13,8 +20,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #ff9ece;
-    color: #fff;
     font-family: PingFang SC;
     font-weight: 500;
     font-style: Medium;
@@ -23,5 +28,21 @@
     line-height: 135%;
     letter-spacing: 0%;
     text-align: center;
+    &.pick {
+        background-color: #ff9ece;
+        color: #fff;
+    }
+    &.red {
+        background-color: #ff7391;
+        color: #fff;
+    }
+    &.blue {
+        background-color: #96e4ff;
+        color: #402b2c;
+    }
+    &.yellow {
+        background-color: #fceb00;
+        color: #402b2c;
+    }
 }
 </style>
