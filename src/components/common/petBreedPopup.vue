@@ -22,6 +22,8 @@ const search = ref("");
 
 const breedList = ref<BreedList[]>([]);
 
+const data = ref<Breed>({});
+
 const dict = [
     { id: "0", name: "cat" },
     { id: "1", name: "dog" },
@@ -72,12 +74,16 @@ const getBreedList = () => {
 };
 
 const handleClick = (item) => {
-    popup.value.close();
-    emit("submit", item);
+    data.value = item;
 };
 
 const handleSearch = (e) => {
     search.value = e.value;
+};
+
+const handleSubmit = () => {
+    popup.value.close();
+    emit("submit", data.value);
 };
 
 onMounted(() => {
@@ -90,7 +96,7 @@ defineExpose({ open });
 </script>
 
 <template>
-    <pet-popup ref="popup" title="选择品种">
+    <pet-popup ref="popup" title="选择品种" @submit="handleSubmit">
         <view class="search">
             <uni-search-bar
                 style="width: 680rpx"
@@ -116,9 +122,12 @@ defineExpose({ open });
                     >
                         <template #lineBody>
                             <view v-for="(child, childIndx) in item.data" :key="childIndx">
-                                <view class="line" @click="handleClick(child)">{{
-                                    child.name
-                                }}</view>
+                                <view
+                                    class="line"
+                                    :class="{ active: data.id === child.id }"
+                                    @click="handleClick(child)"
+                                    >{{ child.name }}</view
+                                >
                             </view>
                         </template>
                     </trigger-index-list-item>
@@ -141,6 +150,10 @@ defineExpose({ open });
     .line {
         padding: 10rpx 20rpx;
         margin: 10rpx 0;
+        border-radius: 8rpx;
+        &.active {
+            background-color: #ffecf5;
+        }
     }
 }
 </style>

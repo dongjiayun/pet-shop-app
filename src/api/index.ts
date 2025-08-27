@@ -46,8 +46,22 @@ export const UserModel: ApiModel = {
     },
 };
 
+export const PetModel: ApiModel = {
+    createPet(data) {
+        return post("/pet", data);
+    },
+};
+
 export const DictModel: ApiModel = {
     getDict(key) {
         return get("/dict/" + key);
+    },
+};
+
+export const UploadModel: ApiModel = {
+    uploadPic(data) {
+        return post("/common/uploadPic", data, {
+            contentType: "multipart/form-data",
+        });
     },
 };

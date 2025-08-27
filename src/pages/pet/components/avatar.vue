@@ -1,15 +1,20 @@
 <script setup lang="ts">
+import { computed } from "vue";
 const props = defineProps({
     image: {
         type: String,
         default: "/static/icons/pet_avatar.png",
     },
 });
+
+const effectiveImage = computed(() => {
+    return props.image || "/static/icons/pet_avatar.png";
+});
 </script>
 
 <template>
     <view class="pet-avatar">
-        <image class="pet-avatar-image" :src="props.image"></image>
+        <image class="pet-avatar-image" :src="effectiveImage"></image>
         <view class="pet-avatar-edit">
             <image class="pet-avatar-edit-icon" src="@/assets/icons/edit.png"></image>
         </view>

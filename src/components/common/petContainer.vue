@@ -61,11 +61,12 @@ const handleSubmit = () => {
     align-items: center;
     min-height: 100vh;
     background: v-bind(backgroundColor);
+    overflow-x: hidden;
     &-main {
         opacity: 0;
         transform: translateY(-20px);
         transition: all 0.5s ease-out;
-        width: 750rpx;
+        width: 100vw;
         padding: 40rpx;
         &.active {
             opacity: 1;

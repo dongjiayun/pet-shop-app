@@ -7,6 +7,9 @@ import PetPopup from "@/components/common/petPopup.vue";
 import DatePopup from "@/components/common/datePopup.vue";
 import PetBreedPopup from "@/components/common/petBreedPopup.vue";
 import dayjs from "dayjs";
+import { PetModel, UploadModel } from "@/api";
+import { push } from "@/router/router";
+import { baseUrl } from "@/config/index";
 
 const popup = ref();
 
@@ -190,7 +193,7 @@ const handleEditAvatar = () => {
 };
 
 const handleChooseImage = (files) => {
-    tempImage.value = files?.[0];
+    form.value.avatar = files?.[0];
 };
 
 const handleGender = () => {
@@ -218,7 +221,7 @@ const handleBreed = () => {
 
 const handleChooseGender = (_, gender) => {
     form.value.gender = gender.name;
-    formData.value.gender = gender;
+    formData.value.gender = gender.id;
 };
 
 const handleChooseDate = (date) => {
@@ -227,7 +230,7 @@ const handleChooseDate = (date) => {
 
 const handleChooseType = (_, type) => {
     form.value.type = type.name;
-    formData.value.type = type;
+    formData.value.type = type.id;
 };
 
 const handleChooseBreed = (breed) => {
@@ -241,7 +244,51 @@ const reverseDict = (dict) => {
     });
 };
 
-const tempImage = ref();
+const handleSubmit = () => {
+    if (!form.value.avatar) {
+        return uni.showToast({
+            title: "请上传宠物头像",
+            icon: "none",
+        });
+    }
+    formRef.value.validate().then(() => {
+        UploadModel.uploadPic({
+            file: form.value.avatar,
+        }).then((res) => {
+            console.log(res, res.status, typeof res);
+            if (res.status === 0) {
+                form.value.avatar = baseUrl + res.data;
+                formData.value = {
+                    ...formData.value,
+                    avatar: form.value.avatar,
+                    customerNickname: form.value.customerNickname,
+                    tailNumber: form.value.tailNumber,
+                    nickname: form.value.nickname,
+                    birthday: form.value.birthday,
+                    weight: form.value.weight,
+                    isSterilized: form.value.isSterilized,
+                    aggressive: form.value.aggressive,
+                    remark: form.value.remark,
+                    diagnosisHistory: form.value.diagnosisHistory,
+                    forbiden: form.value.forbiden,
+                };
+                PetModel.createPet(formData.value).then((res) => {
+                    if (res.code === 0) {
+                        uni.showToast({
+                            title: "新建成功",
+                            icon: "none",
+                        });
+                    }
+                });
+            } else {
+                uni.showToast({
+                    title: res.message,
+                    icon: "none",
+                });
+            }
+        });
+    });
+};
 </script>
 
 <template>
@@ -250,10 +297,11 @@ const tempImage = ref();
         background-color="#FFFBFA"
         bottomButtonName="保存"
         bottom-button-type="red"
+        @submit="handleSubmit"
     >
         <view class="container">
             <view class="profile" @click="handleEditAvatar">
-                <avatar :image="tempImage"></avatar>
+                <avatar :image="form.avatar"></avatar>
                 <view class="profile-label">宠物头像</view>
             </view>
             <view class="form pet-input">
@@ -314,6 +362,16 @@ const tempImage = ref();
                                 validateTrigger="blur"
                             />
                         </view>
+                    </uni-forms-item>
+                    <uni-forms-item label="体重" name="weight">
+                        <uni-easyinput
+                            :inputBorder="false"
+                            type="number"
+                            v-model="form.weight"
+                            placeholder="请输入体重"
+                            primaryColor="#0000001A"
+                            validateTrigger="blur"
+                        />
                     </uni-forms-item>
                     <uni-forms-item label="宠物种类" name="type">
                         <view @click="handleType">
@@ -388,7 +446,7 @@ const tempImage = ref();
                         <uni-easyinput
                             :inputBorder="false"
                             type="text"
-                            v-model="form.forbiden"
+                            v-model="form.remark"
                             placeholder="请输入备注"
                             primaryColor="#0000001A"
                             validateTrigger="blur"

@@ -45,8 +45,9 @@ export const request = <T = any>(
 ): Promise<T> => {
     let url = baseUrl + apiUrl;
     const store = useUserStore();
+    const contentType = config?.contentType || "application/json";
     const header: Record<string, string> = {
-        "Content-Type": "application/json",
+        "Content-Type": contentType,
         Authorization: store.token,
         "Refresh-Token": store.refreshToken,
     };
@@ -69,32 +70,62 @@ export const request = <T = any>(
     });
 
     return new Promise((resolve, reject) => {
-        uni.request({
-            url,
-            method: method.toLowerCase() as any,
-            data: method !== "GET" ? data : {},
-            header,
-            success: (res) => {
-                if (res.statusCode >= 200 && res.statusCode < 300) {
-                    resolve(res.data as T);
-                } else {
-                    const error = {
-                        code: res.statusCode,
-                        response: res,
-                        config,
-                    };
-                    responseInterceptorsResolve(error, config).then(resolve).catch(reject);
-                }
-            },
-            fail: (err) => {
-                responseInterceptorsReject(err, url, config).then(resolve).catch(reject);
-            },
-            complete: () => {
-                setTimeout(() => {
-                    uni.hideLoading();
-                }, 200);
-            },
-        });
+        if (config?.contentType === "multipart/form-data") {
+            uni.uploadFile({
+                url,
+                method: method.toLowerCase() as any,
+                filePath: data.file,
+                name: "file",
+                header,
+                success: (res) => {
+                    if (res.statusCode >= 200 && res.statusCode < 300) {
+                        resolve(JSON.parse(res.data) || (res.data as T));
+                    } else {
+                        const error = {
+                            code: res.statusCode,
+                            response: res,
+                            config,
+                        };
+                        responseInterceptorsResolve(error, config).then(resolve).catch(reject);
+                    }
+                },
+                fail: (err) => {
+                    responseInterceptorsReject(err, url, config).then(resolve).catch(reject);
+                },
+                complete: () => {
+                    setTimeout(() => {
+                        uni.hideLoading();
+                    }, 200);
+                },
+            });
+        } else {
+            uni.request({
+                url,
+                method: method.toLowerCase() as any,
+                data: method !== "GET" ? data : {},
+                header,
+                success: (res) => {
+                    if (res.statusCode >= 200 && res.statusCode < 300) {
+                        resolve(res.data as T);
+                    } else {
+                        const error = {
+                            code: res.statusCode,
+                            response: res,
+                            config,
+                        };
+                        responseInterceptorsResolve(error, config).then(resolve).catch(reject);
+                    }
+                },
+                fail: (err) => {
+                    responseInterceptorsReject(err, url, config).then(resolve).catch(reject);
+                },
+                complete: () => {
+                    setTimeout(() => {
+                        uni.hideLoading();
+                    }, 200);
+                },
+            });
+        }
     });
 };
 
