@@ -37,7 +37,10 @@ const handleSubmit = () => {
 
 <template>
     <view class="pet-container">
-        <pet-navbar :title="props.title" :navBarColor="props.navBarColor"></pet-navbar>
+        <pet-navbar
+            :title="props.title"
+            :navBarColor="props.backgroundColor || props.navBarColor"
+        ></pet-navbar>
         <view class="pet-container-main" :class="{ active: visible }">
             <slot></slot>
         </view>

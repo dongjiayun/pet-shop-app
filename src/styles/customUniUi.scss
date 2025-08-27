@@ -2,6 +2,38 @@
   ::v-deep.uni-easyinput__content{
     background-color:#7E34250F !important;
     border-radius: 32rpx;
-    height: 90rpx;
+    min-height: 90rpx;
+    &.is-textarea{
+      textarea{
+        margin-left: 12rpx;
+      }
+    }
+  }
+  .pet-form-item{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .pet-form-item-label{
+      font-family: PingFang SC;
+      font-weight: 400;
+      font-style: Regular;
+      font-size: 32rpx;
+      leading-trim: NONE;
+      line-height: 100%;
+      letter-spacing: 0%;
+      color:#402B2C;
+    }
+  }
+  ::v-deep.uni-forms-item__label {
+    font-family: PingFang SC;
+    font-weight: 400;
+    font-style: Regular;
+    font-size: 32rpx;
+    leading-trim: NONE;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color:#402B2C;
   }
 }
+
+

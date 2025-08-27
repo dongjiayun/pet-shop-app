@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, nextTick } from "vue";
+import { isNil } from "lodash";
 const popup = ref();
 
 const props = defineProps({
@@ -16,7 +17,6 @@ const props = defineProps({
 
 const handleChoose = (id) => {
     currentChoise.value = id;
-    emit("submit", id);
 };
 
 const open = () => {
@@ -30,10 +30,23 @@ const close = () => {
 const currentChoise = ref();
 
 onMounted(() => {
-    if (props.defaultChoise) {
-        currentChoise.value = props.defaultChoise;
+    if (!isNil(props.defaultChoise)) {
+        nextTick(() => {
+            console.log(props.defaultChoise);
+            console.log(currentChoise.value, props.list);
+            currentChoise.value = props.defaultChoise;
+        });
     }
 });
+
+const handleSubmit = () => {
+    close();
+    emit(
+        "submit",
+        currentChoise.value,
+        props.list.find((item) => item.id === currentChoise.value)
+    );
+};
 
 const emit = defineEmits(["submit"]);
 
@@ -44,12 +57,8 @@ defineExpose({ open, close });
     <uni-popup type="bottom" ref="popup" safeArea>
         <view class="pet-popup">
             <view class="pet-popup-title"> {{ title }} </view>
-            <image
-                @click="popup.close()"
-                class="pet-popup-close"
-                src="@/assets/icons/close.png"
-            ></image>
-            <view class="pet-popup-list">
+            <image @click="close" class="pet-popup-close" src="@/assets/icons/close.png"></image>
+            <view class="pet-popup-list" v-if="list && list.length > 0">
                 <view
                     class="pet-popup-list-item"
                     :class="{ active: currentChoise === item.id }"
@@ -59,7 +68,8 @@ defineExpose({ open, close });
                     >{{ item.name }}
                 </view>
             </view>
-            <view class="pet-popup-submit">确定</view>
+            <slot></slot>
+            <view class="pet-popup-submit" @click="handleSubmit">确定</view>
         </view>
     </uni-popup>
 </template>
@@ -113,7 +123,7 @@ defineExpose({ open, close });
             text-align: center;
             vertical-align: middle;
             border-radius: 10rpx;
-            width: 600rpx;
+            width: 630rpx;
             margin-bottom: 20rpx;
             height: 80rpx;
             &.active {

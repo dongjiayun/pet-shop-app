@@ -45,3 +45,9 @@ export const UserModel: ApiModel = {
         return put("/user/", { cid: store.cid, ...data });
     },
 };
+
+export const DictModel: ApiModel = {
+    getDict(key) {
+        return get("/dict/" + key);
+    },
+};

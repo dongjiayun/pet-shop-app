@@ -14,6 +14,10 @@ const props = defineProps({
         type: String,
         default: "",
     },
+    isCovered: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 onMounted(() => {
@@ -23,22 +27,26 @@ onMounted(() => {
 </script>
 
 <template>
-    <view class="status-bar">
+    <view class="status-bar" :class="{ cover: isCovered }">
         <nav-bubble v-if="!isHome"></nav-bubble>
         <view class="status-bar-title">{{ props.title }}</view>
         <view />
     </view>
+    <view class="status-bar-placeholder"></view>
 </template>
 
 <style lang="scss" scoped>
 .status-bar {
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
     height: calc(var(--status-bar-height) + 116rpx);
     width: 100vw;
     display: flex;
     align-items: flex-end;
     justify-content: center;
     background: v-bind(navBarColor);
+    z-index: 1;
     &-title {
         margin-bottom: 16rpx;
         font-family: PingFang SC;
@@ -51,5 +59,15 @@ onMounted(() => {
         text-align: center;
         color: #402b2c;
     }
+    &.cover {
+        background: #fff;
+    }
+}
+.status-bar-placeholder {
+    position: relative;
+    top: 0;
+    left: 0;
+    height: calc(var(--status-bar-height) + 116rpx);
+    width: 100vw;
 }
 </style>
