@@ -22,19 +22,12 @@ const search = ref("");
 
 const breedList = ref<BreedList[]>([]);
 
-const data = ref<Breed>({});
-
-const dict = [
-    { id: "0", name: "cat" },
-    { id: "1", name: "dog" },
-    { id: "2", name: "others" },
-];
+const data = ref<Breed>();
 
 const _list = computed(() => {
-    const data = breedList.value.find(
-        (item) => item.type === dict.find((i) => i.id === props.type)?.name
-    )?.breeds;
-    return data;
+    const typeId = props.type; // 直接依赖响应式prop
+    const typeName = typeId === "0" ? "cat" : typeId === "1" ? "dog" : "others";
+    return breedList.value.find((item) => item.type === typeName)?.breeds || [];
 });
 
 const list = computed(() => {
@@ -124,7 +117,7 @@ defineExpose({ open });
                             <view v-for="(child, childIndx) in item.data" :key="childIndx">
                                 <view
                                     class="line"
-                                    :class="{ active: data.id === child.id }"
+                                    :class="{ active: data?.id === child?.id }"
                                     @click="handleClick(child)"
                                     >{{ child.name }}</view
                                 >

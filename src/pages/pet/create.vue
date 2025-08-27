@@ -477,7 +477,7 @@ const handleSubmit = () => {
         @submit="handleChooseType"
     ></pet-popup>
     <pet-breed-popup
-        :type="formData.type?.id"
+        :type="formData.type"
         ref="breedPopup"
         @submit="handleChooseBreed"
     ></pet-breed-popup>
