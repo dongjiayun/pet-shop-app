@@ -22,7 +22,7 @@ const props = defineProps({
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
+    border-radius: 20rpx;
     font-size: 28rpx;
     padding: 4rpx 10rpx;
     &.male {

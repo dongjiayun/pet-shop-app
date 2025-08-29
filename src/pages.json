@@ -114,6 +114,10 @@
                 "name": "寄养档案",
                 "path": "pages/pet/entrustmentDetail",
                 "query": "petId=Pet-1c6613f3-4394-4910-9d75-51c0f3329b52"
+            },
+            {
+                "name": "宠物列表",
+                "path": "pages/pet/index"
             }
         ]
     }

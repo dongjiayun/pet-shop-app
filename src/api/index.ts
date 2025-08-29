@@ -56,6 +56,9 @@ export const PetModel: ApiModel = {
     updatePet(data) {
         return put("/pet", data);
     },
+    getList(data) {
+        return post("/pet/list", data);
+    },
 };
 
 export const PetWashRecordModel: ApiModel = {

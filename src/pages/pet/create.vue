@@ -332,7 +332,13 @@ const handleSubmit = () => {
                 <view class="form-title">基本资料</view>
                 <pet-divider></pet-divider>
                 <view style="margin-bottom: 32rpx"></view>
-                <uni-forms ref="formRef" :modelValue="form" :rules="rules" label-position="top">
+                <uni-forms
+                    label-width="200"
+                    ref="formRef"
+                    :modelValue="form"
+                    :rules="rules"
+                    label-position="top"
+                >
                     <uni-forms-item label="客户称谓" name="customerNickname">
                         <uni-easyinput
                             :inputBorder="false"

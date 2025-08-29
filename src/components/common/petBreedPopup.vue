@@ -96,6 +96,9 @@ defineExpose({ open });
                 v-model="search"
                 placeholder="搜索品种"
                 cancelButton="none"
+                :radius="100"
+                bgColor="#F5E9EB"
+                textColor="#402B2C"
                 @input="handleSearch"
             ></uni-search-bar>
         </view>
