@@ -27,6 +27,24 @@ export function getDictLabelByVal(
     return result || "";
 }
 
+export function getDictNameById(
+    data: Dicts,
+    val: number | string | undefined,
+    props: dictProp = { value: "id", label: "name" }
+): string {
+    let result = "";
+    if (val || val === 0) {
+        if (data && data.length > 0) {
+            data.forEach((item) => {
+                if ((item as any)[props.value] === val) {
+                    result = (item as any)[props.label];
+                }
+            });
+        }
+    }
+    return result || "";
+}
+
 export function getDictNameByVal(
     data: Array<object>,
     val: number | string,

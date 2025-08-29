@@ -1,18 +1,23 @@
 <script setup lang="ts">
 import PetContainer from "@/components/common/petContainer.vue";
-import avatar from "./components/avatar.vue";
-import imageUploadPopup from "@/components/common/imageUploadPopup.vue";
-import { ref } from "vue";
-import PetPopup from "@/components/common/petPopup.vue";
+import { ref, onMounted } from "vue";
 import DatePopup from "@/components/common/datePopup.vue";
+import PetPopup from "@/components/common/petPopup.vue";
 import PetBreedPopup from "@/components/common/petBreedPopup.vue";
 import dayjs from "dayjs";
-import { PetModel, UploadModel } from "@/api";
-import { push } from "@/router/router";
-import { baseUrl } from "@/config/index";
-import PetDivider from "@/components/common/petDivider.vue";
+import { PetModel } from "@/api";
+import { onLoad } from "@dcloudio/uni-app";
+import { getDictNameById } from "@/utils";
 
-const popup = ref();
+const petId = ref();
+
+onLoad((props) => {
+    petId.value = props.petId;
+});
+
+const isEdit = ref(false);
+
+const formRef = ref();
 
 const genderPopup = ref();
 
@@ -22,12 +27,9 @@ const typePopup = ref();
 
 const breedPopup = ref();
 
-const formRef = ref();
+const rules = {};
 
-const form = ref({
-    avatar: "",
-    customerNickname: "",
-    tailNumber: "",
+const formData = ref({
     nickname: "",
     gender: "",
     birthday: "",
@@ -41,10 +43,7 @@ const form = ref({
     remark: "",
 });
 
-const formData = ref({
-    avatar: "",
-    customerNickname: "",
-    tailNumber: "",
+const form = ref({
     nickname: "",
     gender: "",
     birthday: "",
@@ -78,138 +77,49 @@ const dicts = {
     ],
 };
 
-const rules = ref({
-    customerNickname: {
-        rules: [
-            {
-                required: true,
-                errorMessage: "请输入客户称谓",
-            },
-        ],
-    },
-    tailNumber: {
-        rules: [
-            {
-                required: true,
-                errorMessage: "请输入客户手机尾号",
-            },
-            {
-                validateFunction: (rule, value, data, callback) => {
-                    if (!/^\d{4}$/.test(value)) {
-                        return callback("请输入4位客户手机尾号");
-                    }
-                    return callback();
-                },
-            },
-        ],
-    },
-    nickname: {
-        rules: [
-            {
-                required: true,
-                errorMessage: "请输入宠物昵称",
-            },
-        ],
-    },
-    gender: {
-        rules: [
-            {
-                required: true,
-                errorMessage: "请选择宠物性别",
-            },
-        ],
-    },
-    birthday: {
-        rules: [
-            {
-                required: true,
-                errorMessage: "请选择宠物生日",
-            },
-        ],
-    },
-    weight: {
-        rules: [
-            {
-                required: true,
-                errorMessage: "请输入宠物体重",
-            },
-            {
-                validateFunction: (rule, value, data, callback) => {
-                    if (!/^\d+(\.\d+)?$/.test(value)) {
-                        return callback("请输入正确的宠物体重");
-                    }
-                    return callback();
-                },
-            },
-        ],
-    },
-    breed: {
-        rules: [
-            {
-                required: true,
-                errorMessage: "请选择宠物品种",
-            },
-        ],
-    },
-    type: {
-        rules: [
-            {
-                required: true,
-                errorMessage: "请选择宠物类型",
-            },
-        ],
-    },
-    isSterilized: {
-        rules: [
-            {
-                required: true,
-                errorMessage: "请选择是否绝育",
-            },
-        ],
-    },
-    aggressive: {
-        rules: [
-            {
-                required: true,
-                errorMessage: "请选择是否有攻击行为",
-            },
-        ],
-    },
-    remark: {
-        rules: [
-            {
-                validateFunction: (rule, value, data, callback) => {
-                    if (form.value.type === "2") {
-                        return callback("异宠请备注宠物品种");
-                    }
-                    return callback();
-                },
-            },
-        ],
-    },
-});
-
-const handleEditAvatar = () => {
-    popup.value.open();
-};
-
-const handleChooseImage = (files) => {
-    form.value.avatar = files?.[0];
+const getPetDetail = () => {
+    PetModel.getPetDetail(petId.value).then((res) => {
+        if (res.status !== 0) {
+            uni.showToast({
+                title: res.message,
+                icon: "none",
+            });
+            return Promise.reject(new Error(res.message));
+        }
+        formData.value = res.data;
+        form.value = {
+            nickname: res.data.nickName,
+            gender: getDictNameById(dicts.gender, res.data.gender),
+            birthday: res.data.birthday,
+            weight: res.data.weight,
+            breed: res.data.breed.name,
+            type: getDictNameById(dicts.type, res.data.type),
+            diagnosisHistory: res.data.diagnosisHistory,
+            forbiden: res.data.forbiden,
+            isSterilized: res.data.isSterilized,
+            aggressive: res.data.aggressive,
+            remark: res.data.remark,
+        };
+    });
 };
 
 const handleGender = () => {
+    if (!isEdit.value) return;
     genderPopup.value.open();
 };
 
 const handleDate = () => {
+    if (!isEdit.value) return;
     datePopup.value.open();
 };
 
 const handleType = () => {
+    if (!isEdit.value) return;
     typePopup.value.open();
 };
 
 const handleBreed = () => {
+    if (!isEdit.value) return;
     if (!form.value.type) {
         uni.showToast({
             title: "请先选择宠物类型",
@@ -248,116 +158,81 @@ const reverseDict = (dict) => {
 };
 
 const handleSubmit = () => {
-    if (!form.value.avatar) {
-        return uni.showToast({
-            title: "请上传宠物头像",
-            icon: "none",
-        });
-    }
     formRef.value.validate().then(() => {
         uni.showLoading({
             title: "请稍后",
         });
-        UploadModel.uploadPic({
-            file: form.value.avatar,
-        })
+        formData.value = {
+            ...formData.value,
+            nickname: form.value.nickname,
+            birthday: form.value.birthday,
+            weight: form.value.weight,
+            isSterilized: form.value.isSterilized,
+            aggressive: form.value.aggressive,
+            remark: form.value.remark,
+            diagnosisHistory: form.value.diagnosisHistory,
+            forbiden: form.value.forbiden,
+        };
+        PetModel.updatePet(formData.value)
             .then((res) => {
-                console.log(res, res.status, typeof res);
                 if (res.status === 0) {
-                    form.value.avatar = baseUrl + res.data;
-                    formData.value = {
-                        ...formData.value,
-                        avatar: form.value.avatar,
-                        customerNickname: form.value.customerNickname,
-                        tailNumber: form.value.tailNumber,
-                        nickname: form.value.nickname,
-                        birthday: form.value.birthday,
-                        weight: form.value.weight,
-                        isSterilized: form.value.isSterilized,
-                        aggressive: form.value.aggressive,
-                        remark: form.value.remark,
-                        diagnosisHistory: form.value.diagnosisHistory,
-                        forbiden: form.value.forbiden,
-                    };
-                    PetModel.createPet(formData.value)
-                        .then((res) => {
-                            if (res.code === 0) {
-                                setTimeout(() => {
-                                    uni.showToast({
-                                        title: "新建成功",
-                                        icon: "none",
-                                    });
-                                }, 500);
-                                push({
-                                    name: "petDetail",
-                                    query: {
-                                        petId: res.data.id,
-                                    },
-                                });
-                            }
-                        })
-                        .finally(() => {
-                            uni.hideLoading();
+                    setTimeout(() => {
+                        uni.showToast({
+                            title: "修改成功",
+                            icon: "none",
                         });
-                } else {
-                    uni.showToast({
-                        title: res.message,
-                        icon: "none",
-                    });
-                    uni.hideLoading();
+                    }, 500);
+                    isEdit.value = false;
+                    getPetDetail();
                 }
             })
-            .catch(() => {
+            .finally(() => {
                 uni.hideLoading();
             });
     });
 };
+
+const handleEdit = () => {
+    isEdit.value = !isEdit.value;
+    getPetDetail();
+};
+
+onMounted(() => {
+    getPetDetail();
+});
 </script>
 
 <template>
     <pet-container
-        title="宠物档案录入"
-        background-color="#FFFBFA"
-        nav-bar-color="#FFF5F8"
-        bottomButtonName="保存"
-        bottom-button-type="red"
+        nav-bar-color="#FFFBC0"
+        background-color="#FFFCE0"
+        title="宠物档案"
+        :bottomButtonName="isEdit ? '保存' : null"
+        bottom-button-type="yellow"
         @submit="handleSubmit"
     >
-        <view class="container">
-            <view class="profile" @click="handleEditAvatar">
-                <avatar :image="form.avatar"></avatar>
-                <view class="profile-label">宠物头像</view>
+        <view class="base-detail" :class="{ 'base-detail-edit': isEdit }">
+            <view class="base-detail-header">
+                <view class="base-detail-header-title">基本资料</view>
+                <view class="base-detail-header-edit" v-if="!isEdit" @click="handleEdit">
+                    <image
+                        class="base-detail-header-edit-icon"
+                        src="@/assets/icons/edit_1.png"
+                    ></image>
+                    <view class="base-detail-header-edit-text">编辑</view>
+                </view>
+                <view @click="handleEdit" v-else>
+                    <view class="base-detail-header-edit-text">取消</view>
+                </view>
             </view>
-            <view class="form pet-input">
-                <view class="form-title">基本资料</view>
-                <pet-divider></pet-divider>
-                <view style="margin-bottom: 32rpx"></view>
+            <view class="base-detail-content pet-input">
                 <uni-forms ref="formRef" :modelValue="form" :rules="rules" label-position="top">
-                    <uni-forms-item label="客户称谓" name="customerNickname">
-                        <uni-easyinput
-                            :inputBorder="false"
-                            type="text"
-                            v-model="form.customerNickname"
-                            placeholder="请输入客户称谓"
-                            primaryColor="#0000001A"
-                            validateTrigger="blur"
-                        />
-                    </uni-forms-item>
-                    <uni-forms-item label="手机尾号" name="tailNumber">
-                        <uni-easyinput
-                            :inputBorder="false"
-                            type="text"
-                            v-model="form.tailNumber"
-                            placeholder="请输入客户手机尾号后四位"
-                            primaryColor="#0000001A"
-                            validateTrigger="blur"
-                        />
-                    </uni-forms-item>
                     <uni-forms-item label="宠物昵称" name="nickname">
                         <uni-easyinput
                             :inputBorder="false"
                             type="text"
                             v-model="form.nickname"
+                            :disabled="!isEdit"
                             placeholder="请输入宠物昵称"
                             primaryColor="#0000001A"
                             validateTrigger="blur"
@@ -384,7 +259,6 @@ const handleSubmit = () => {
                                 disabled
                                 v-model="form.birthday"
                                 placeholder="请选择生日"
-                                primaryColor="#0000001A"
                                 validateTrigger="blur"
                             />
                         </view>
@@ -394,6 +268,7 @@ const handleSubmit = () => {
                             :inputBorder="false"
                             type="number"
                             v-model="form.weight"
+                            :disabled="!isEdit"
                             placeholder="请输入体重"
                             primaryColor="#0000001A"
                             validateTrigger="blur"
@@ -431,7 +306,8 @@ const handleSubmit = () => {
                             type="textarea"
                             auto-height
                             v-model="form.diagnosisHistory"
-                            placeholder="请输入疾病史"
+                            :disabled="!isEdit"
+                            :placeholder="isEdit ? '请输入疾病史' : '-'"
                             primaryColor="#0000001A"
                             validateTrigger="blur"
                         />
@@ -441,7 +317,8 @@ const handleSubmit = () => {
                             :inputBorder="false"
                             type="text"
                             v-model="form.forbiden"
-                            placeholder="请输入禁忌点"
+                            :disabled="!isEdit"
+                            :placeholder="isEdit ? '请输入禁忌点' : '-'"
                             primaryColor="#0000001A"
                             validateTrigger="blur"
                         />
@@ -450,6 +327,7 @@ const handleSubmit = () => {
                         <view class="pet-form-item">
                             <view class="pet-form-item-label">是否绝育</view>
                             <uni-data-checkbox
+                                :disabled="!isEdit"
                                 v-model="form.isSterilized"
                                 :localdata="reverseDict(dicts.isSterilized)"
                                 selectedColor="#FF7391"
@@ -461,6 +339,7 @@ const handleSubmit = () => {
                         <view class="pet-form-item">
                             <view class="pet-form-item-label">是否有攻击行为</view>
                             <uni-data-checkbox
+                                :disabled="!isEdit"
                                 v-model="form.aggressive"
                                 :localdata="reverseDict(dicts.aggressive)"
                                 selectedColor="#FF7391"
@@ -470,10 +349,11 @@ const handleSubmit = () => {
                     </uni-forms-item>
                     <uni-forms-item label="备注" name="forbiden">
                         <uni-easyinput
+                            :disabled="!isEdit"
                             :inputBorder="false"
                             type="text"
                             v-model="form.remark"
-                            placeholder="请输入备注"
+                            :placeholder="isEdit ? '请输入备注' : '-'"
                             primaryColor="#0000001A"
                             validateTrigger="blur"
                         />
@@ -482,11 +362,6 @@ const handleSubmit = () => {
             </view>
         </view>
     </pet-container>
-    <image-upload-popup
-        ref="popup"
-        :image-count="1"
-        @submit="handleChooseImage"
-    ></image-upload-popup>
     <pet-popup
         ref="genderPopup"
         title="性别"
@@ -511,28 +386,16 @@ const handleSubmit = () => {
 
 <style scoped lang="scss">
 @use "@/styles/customUniUi.scss";
-.container {
-    min-height: 100vh;
-    .profile {
+.base-detail {
+    padding: 0 32rpx;
+    &-edit {
+        padding-bottom: 200rpx;
+    }
+    &-header {
         display: flex;
         align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        &-label {
-            font-family: PingFang SC;
-            font-weight: 500;
-            font-style: Medium;
-            font-size: 32rpx;
-            leading-trim: NONE;
-            letter-spacing: -2%;
-            text-align: center;
-            margin-top: 10rpx;
-        }
-    }
-    .form {
-        margin-top: 48rpx;
-        padding: 32rpx;
-        margin-bottom: 200rpx;
+        justify-content: space-between;
+        margin-bottom: 48rpx;
         &-title {
             font-family: PingFang SC;
             font-weight: 500;
@@ -542,7 +405,25 @@ const handleSubmit = () => {
             line-height: 100%;
             letter-spacing: 0%;
             color: #402b2c;
-            margin-bottom: 8rpx;
+        }
+        &-edit {
+            display: flex;
+            align-items: center;
+            &-icon {
+                width: 28rpx;
+                height: 28rpx;
+                margin-right: 8rpx;
+            }
+            &-text {
+                font-family: PingFang SC;
+                font-weight: 400;
+                font-style: Regular;
+                font-size: 28rpx;
+                leading-trim: NONE;
+                line-height: 100%;
+                letter-spacing: 0%;
+                color: #402b2c;
+            }
         }
     }
 }

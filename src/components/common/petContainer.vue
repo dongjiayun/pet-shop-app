@@ -18,7 +18,7 @@ const props = defineProps({
     bottomButtonName: String,
     bottomButtonType: {
         type: String,
-        default: "pick",
+        default: "pink",
     },
 });
 
@@ -39,7 +39,7 @@ const handleSubmit = () => {
     <view class="pet-container">
         <pet-navbar
             :title="props.title"
-            :navBarColor="props.backgroundColor || props.navBarColor"
+            :navBarColor="props.navBarColor || props.backgroundColor"
         ></pet-navbar>
         <view class="pet-container-main" :class="{ active: visible }">
             <slot></slot>

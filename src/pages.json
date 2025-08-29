@@ -44,6 +44,18 @@
                 },
                 {
                     "path": "create"
+                },
+                {
+                    "path": "detail"
+                },
+                {
+                    "path": "baseDetail"
+                },
+                {
+                    "path": "washDetail"
+                },
+                {
+                    "path": "entrustmentDetail"
                 }
             ]
         }
@@ -82,6 +94,26 @@
             {
                 "name": "添加宠物",
                 "path": "pages/pet/create"
+            },
+            {
+                "name": "宠物档案",
+                "path": "pages/pet/detail",
+                "query": "petId=Pet-1c6613f3-4394-4910-9d75-51c0f3329b52"
+            },
+            {
+                "name": "宠物基本档案",
+                "path": "pages/pet/baseDetail",
+                "query": "petId=Pet-1c6613f3-4394-4910-9d75-51c0f3329b52"
+            },
+            {
+                "name": "宠物洗护档案",
+                "path": "pages/pet/washDetail",
+                "query": "petId=Pet-1c6613f3-4394-4910-9d75-51c0f3329b52"
+            },
+            {
+                "name": "寄养档案",
+                "path": "pages/pet/entrustmentDetail",
+                "query": "petId=Pet-1c6613f3-4394-4910-9d75-51c0f3329b52"
             }
         ]
     }

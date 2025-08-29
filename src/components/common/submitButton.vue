@@ -2,7 +2,7 @@
 const props = defineProps({
     type: {
         type: String,
-        default: "pick",
+        default: "pink",
     },
 });
 </script>
@@ -28,7 +28,7 @@ const props = defineProps({
     line-height: 135%;
     letter-spacing: 0%;
     text-align: center;
-    &.pick {
+    &.pink {
         background-color: #ff9ece;
         color: #fff;
     }

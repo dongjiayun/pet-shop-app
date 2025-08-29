@@ -51,6 +51,22 @@ const pet: Routes = [
         path: "/pages/pet/create",
         name: "createPet",
     },
+    {
+        path: "/pages/pet/detail",
+        name: "petDetail",
+    },
+    {
+        path: "/pages/pet/baseDetail",
+        name: "petBaseDetail",
+    },
+    {
+        path: "/pages/pet/washDetail",
+        name: "petWashDetail",
+    },
+    {
+        path: "/pages/pet/entrustmentDetail",
+        name: "petEntrustmentDetail",
+    },
 ];
 
 const routes: Route[] = [...base, ...auth, ...mine, ...pet];

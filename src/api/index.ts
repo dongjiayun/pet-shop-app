@@ -50,6 +50,36 @@ export const PetModel: ApiModel = {
     createPet(data) {
         return post("/pet", data);
     },
+    getPetDetail(petId) {
+        return get("/pet/" + petId);
+    },
+    updatePet(data) {
+        return put("/pet", data);
+    },
+};
+
+export const PetWashRecordModel: ApiModel = {
+    createPetWashRecord(data) {
+        return post("/washRecord", data);
+    },
+    getPetWashRecord(petId) {
+        return get("/washRecord/" + petId);
+    },
+    updatePetWashRecord(data) {
+        return put("/washRecord", data);
+    },
+};
+
+export const PetEntrustmentModel: ApiModel = {
+    createPetEntrustment(data) {
+        return post("/entrustment", data);
+    },
+    getPetEntrustment(petId) {
+        return get("/entrustment/" + petId);
+    },
+    updatePetEntrustment(data) {
+        return put("/entrustment", data);
+    },
 };
 
 export const DictModel: ApiModel = {

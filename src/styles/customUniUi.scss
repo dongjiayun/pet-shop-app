@@ -3,10 +3,16 @@
     background-color:#7E34250F !important;
     border-radius: 32rpx;
     min-height: 90rpx;
+    input{
+      color:#402B2C!important;
+    }
     &.is-textarea{
       textarea{
         margin-left: 12rpx;
       }
+    }
+    &.is-disabled{
+      color:#402B2C!important;
     }
   }
   .pet-form-item{
@@ -33,6 +39,18 @@
     line-height: 100%;
     letter-spacing: 0%;
     color:#402B2C;
+    &.no-label{
+      display: none;
+    }
+  }
+
+  ::v-deep.uni-data-checklist{
+    .radio__inner{
+      opacity: 1 !important;
+    }
+    .checklist-text{
+      opacity: 1 !important;
+    }
   }
 }
 

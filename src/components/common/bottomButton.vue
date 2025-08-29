@@ -8,7 +8,7 @@ const props = defineProps({
     },
     type: {
         type: String,
-        default: "pick",
+        default: "pink",
     },
 });
 
@@ -35,14 +35,14 @@ const emit = defineEmits(["submit"]);
     z-index: 1;
     padding: 32rpx;
     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
-    &.pick {
+    &.pink {
         background-color: #ffecf5;
     }
     &.red {
         background-color: #fffbfa;
     }
     &.blue {
-        background-color: #96e4ff;
+        background-color: #e8f9ff;
     }
     &.yellow {
         background-color: #fffce0;
