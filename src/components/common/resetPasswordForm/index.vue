@@ -80,7 +80,7 @@ const rules = ref({
         rules: [
             {
                 required: true,
-                errorMessage: "请输入手机号/邮箱",
+                errorMessage: "请输入邮箱",
             },
             {
                 format: "email",

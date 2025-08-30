@@ -2,13 +2,14 @@
 import petContainer from "@/components/common/petContainer.vue";
 import { useUserStore } from "@/stores/user";
 import { computed } from "vue";
-import { push } from "@/router/router";
+import { push, redirectTo } from "@/router/router";
 import PetDivider from "@/components/common/petDivider.vue";
 import PetPopup from "@/components/common/petPopup.vue";
 import ImageUploadPopup from "@/components/common/imageUploadPopup.vue";
 import { ref } from "vue";
 import { UserModel, UploadModel } from "@/api";
 import { baseUrl } from "@/config";
+import { onShow } from "@dcloudio/uni-app";
 
 const logoutPopup = ref();
 
@@ -131,6 +132,14 @@ const handleChooseImage = (files) => {
             });
     });
 };
+
+onShow(() => {
+    if (!store.cid) {
+        redirectTo({
+            name: "signin",
+        });
+    }
+});
 </script>
 
 <template>
