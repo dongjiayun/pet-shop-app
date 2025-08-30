@@ -8,11 +8,15 @@ import dayjs from "dayjs";
 import { PetModel } from "@/api";
 import { onLoad } from "@dcloudio/uni-app";
 import { getDictNameById } from "@/utils";
+import { useAppStore } from "@/stores/app";
 
 const petId = ref();
 
+const isHistory = ref(false);
+
 onLoad((props) => {
     petId.value = props.petId;
+    isHistory.value = props.isHistory;
 });
 
 const isEdit = ref(false);
@@ -78,6 +82,27 @@ const dicts = {
 };
 
 const getPetDetail = () => {
+    if (isHistory.value) {
+        const store = useAppStore();
+        form.value = {
+            nickname: store.historyCache?.nickName || "",
+            gender: store.historyCache?.gender
+                ? getDictNameById(dicts.gender, store.historyCache.gender)
+                : "",
+            birthday: store.historyCache?.birthday || "",
+            weight: store.historyCache?.weight || "",
+            breed: store.historyCache?.breed?.name || "",
+            type: store.historyCache?.type
+                ? getDictNameById(dicts.type, store.historyCache.type)
+                : "",
+            diagnosisHistory: store.historyCache?.diagnosisHistory || "",
+            forbiden: store.historyCache?.forbiden || false,
+            isSterilized: store.historyCache?.isSterilized || false,
+            aggressive: store.historyCache?.aggressive || false,
+            remark: store.historyCache?.remark || "",
+        };
+        return;
+    }
     PetModel.getPetDetail(petId.value).then((res) => {
         if (res.status !== 0) {
             uni.showToast({
@@ -214,19 +239,29 @@ onMounted(() => {
         <view class="base-detail" :class="{ 'base-detail-edit': isEdit }">
             <view class="base-detail-header">
                 <view class="base-detail-header-title">基本资料</view>
-                <view class="base-detail-header-edit" v-if="!isEdit" @click="handleEdit">
+                <view
+                    class="base-detail-header-edit"
+                    v-if="!isEdit && !isHistory"
+                    @click="handleEdit"
+                >
                     <image
                         class="base-detail-header-edit-icon"
                         src="@/assets/icons/edit_1.png"
                     ></image>
                     <view class="base-detail-header-edit-text">编辑</view>
                 </view>
-                <view @click="handleEdit" v-else>
+                <view @click="handleEdit" v-else-if="!isHistory">
                     <view class="base-detail-header-edit-text">取消</view>
                 </view>
             </view>
             <view class="base-detail-content pet-input">
-                <uni-forms ref="formRef" :modelValue="form" :rules="rules" label-position="top">
+                <uni-forms
+                    ref="formRef"
+                    :modelValue="form"
+                    :rules="rules"
+                    label-position="top"
+                    label-width="200"
+                >
                     <uni-forms-item label="宠物昵称" name="nickname">
                         <uni-easyinput
                             :inputBorder="false"

@@ -130,7 +130,10 @@ onMounted(() => {
                             class="staff-list-item-avatar-image"
                         ></image>
                     </view>
-                    <view class="staff-list-item-info">{{ item.username }}</view>
+                    <view class="staff-list-item-info">
+                        <view style="margin-bottom: 8rpx">{{ item.username }}</view>
+                        <view style="color: #939393; font-size: 20rpx">{{ item.email }}</view>
+                    </view>
                     <view class="staff-list-item-role">
                         {{ getDictNameById(dicts.role, item.role) }}
                     </view>
@@ -187,7 +190,8 @@ onMounted(() => {
         &-info {
             flex: 1;
             display: flex;
-            align-items: center;
+            flex-direction: column;
+            align-items: flex-start;
             font-family: PingFang SC;
             font-weight: 500;
             font-style: Medium;

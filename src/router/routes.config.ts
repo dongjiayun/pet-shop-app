@@ -71,6 +71,10 @@ const pet: Routes = [
         path: "/pages/pet/entrustmentDetail",
         name: "petEntrustmentDetail",
     },
+    {
+        path: "/pages/pet/history",
+        name: "petEditHistory",
+    },
 ];
 
 const routes: Route[] = [...base, ...auth, ...mine, ...pet];

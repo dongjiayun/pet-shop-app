@@ -13,6 +13,10 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    isHistory: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 const search = ref("");
@@ -68,12 +72,21 @@ const getPetList = (pageNo = 1, pageSize = 20) => {
 };
 
 const handleChoose = (petId) => {
-    push({
-        name: "petDetail",
-        query: {
-            petId,
-        },
-    });
+    if (props.isHistory) {
+        push({
+            name: "petEditHistory",
+            query: {
+                petId,
+            },
+        });
+    } else {
+        push({
+            name: "petDetail",
+            query: {
+                petId,
+            },
+        });
+    }
 };
 
 onMounted(() => {

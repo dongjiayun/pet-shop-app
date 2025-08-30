@@ -75,6 +75,15 @@ const handleAuthorization = () => {
     });
 };
 
+const handleHistory = () => {
+    push({
+        name: "petList",
+        query: {
+            isHistory: true,
+        },
+    });
+};
+
 const handleEditAvatar = () => {
     popup.value.open();
 };
@@ -151,12 +160,12 @@ const handleChooseImage = (files) => {
                 v-if="[1, 2, 3].includes(store.role)"
             >
                 <image src="@/assets/icons/myCustomer.png" class="mine-list-item-icon"></image>
-                <view class="mine-list-item-label">我记录的宠物</view>
+                <view class="mine-list-item-label">我相关的宠物</view>
                 <image src="@/assets/icons/left.png" class="mine-list-item-right"></image>
             </view>
-            <view class="mine-list-item" v-if="[2, 3].includes(store.role)">
+            <view class="mine-list-item" v-if="[2, 3].includes(store.role)" @click="handleHistory">
                 <image src="@/assets/icons/history.png" class="mine-list-item-icon"></image>
-                <view class="mine-list-item-label">宠物档案修改历史</view>
+                <view class="mine-list-item-label">宠物档案变更记录</view>
                 <image src="@/assets/icons/left.png" class="mine-list-item-right"></image>
             </view>
             <view

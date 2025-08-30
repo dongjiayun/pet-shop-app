@@ -91,6 +91,18 @@ export const PetEntrustmentModel: ApiModel = {
     },
 };
 
+export const HistoryModel: ApiModel = {
+    getPetHistory(data) {
+        return post("/pet/history", data);
+    },
+    getWashRecordHistory(data) {
+        return post("/washRecord/history", data);
+    },
+    getEntrustmentHistory(data) {
+        return post("/entrustment/history", data);
+    },
+};
+
 export const DictModel: ApiModel = {
     getDict(key) {
         return get("/dict/" + key);

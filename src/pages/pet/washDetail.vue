@@ -6,6 +6,9 @@ import { onLoad } from "@dcloudio/uni-app";
 import uploadPics from "@/components/common/uploadPics.vue";
 import imageUploadPopup from "@/components/common/imageUploadPopup.vue";
 import { baseUrl } from "@/config";
+import { useAppStore } from "@/stores/app";
+
+const isHistory = ref(false);
 
 const petId = ref();
 
@@ -17,6 +20,7 @@ const isCreate = ref(false);
 
 onLoad((props) => {
     petId.value = props.petId;
+    isHistory.value = props.isHistory;
 });
 
 const isEdit = ref(false);
@@ -48,6 +52,11 @@ const dicts = {
 };
 
 const getPetDetail = () => {
+    if (isHistory.value) {
+        const store = useAppStore();
+        form.value = store.historyCache;
+        return;
+    }
     PetWashRecordModel.getPetWashRecord(petId.value).then((res) => {
         if (res.status !== 0) {
             uni.showToast({
@@ -78,6 +87,9 @@ const handleSubmit = () => {
         uni.showLoading({
             title: "请稍后",
         });
+        if (!Array.isArray(form.value.attachments)) {
+            form.value.attachments = [];
+        }
         const uploadLists = form.value.attachments.map((item: string) => {
             return new Promise((resolve) => {
                 if (item.includes(baseUrl)) {
@@ -171,14 +183,18 @@ onMounted(() => {
             <view class="base-detail-header">
                 <view class="base-detail-header-title">洗护美容档案</view>
                 <template v-if="!isCreate">
-                    <view class="base-detail-header-edit" v-if="!isEdit" @click="handleEdit">
+                    <view
+                        class="base-detail-header-edit"
+                        v-if="!isEdit && !isHistory"
+                        @click="handleEdit"
+                    >
                         <image
                             class="base-detail-header-edit-icon"
                             src="@/assets/icons/edit_1.png"
                         ></image>
                         <view class="base-detail-header-edit-text">编辑</view>
                     </view>
-                    <view @click="handleEdit" v-else>
+                    <view @click="handleEdit" v-else-if="!isHistory">
                         <view class="base-detail-header-edit-text">取消</view>
                     </view>
                 </template>
