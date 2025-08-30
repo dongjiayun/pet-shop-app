@@ -33,6 +33,10 @@ const auth: Routes = [
         path: "/pages/auth/resetPassword",
         name: "resetPassword",
     },
+    {
+        path: "/pages/auth/authorization",
+        name: "authorization",
+    },
 ];
 
 const mine: Routes = [

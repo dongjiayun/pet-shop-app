@@ -11,6 +11,7 @@ interface User {
     username: string;
     email: string;
     role: number;
+    isRefreshed: boolean;
 }
 
 interface LoginParam {
@@ -27,6 +28,7 @@ export const useUserStore = defineStore("user", {
         username: "",
         email: "",
         role: 0,
+        isRefreshed: false,
     }),
     actions: {
         getUserInfo() {
@@ -38,8 +40,12 @@ export const useUserStore = defineStore("user", {
                     });
                     Promise.reject(new Error(res.message));
                 } else {
-                    this.setUserInfo(res.data);
-                    return res.data;
+                    const userInfo = {
+                        ...res.data,
+                        avatar: res.data.avatar.fileUrl || "",
+                    };
+                    this.setUserInfo(userInfo);
+                    return userInfo;
                 }
             });
         },
@@ -60,18 +66,23 @@ export const useUserStore = defineStore("user", {
             }
         },
         logout(): Promise<void> {
-            return AuthModel.logout().then(() => {
-                this.token = "";
-                this.refreshToken = "";
-                this.cid = "";
-                this.avatar = "";
-                this.username = "";
-                this.email = "";
-                this.role = 0;
-                reLaunch({
-                    name: "home",
+            Local.remove("userInfo");
+            if (this.token) {
+                return AuthModel.logout().then(() => {
+                    this.token = "";
+                    this.refreshToken = "";
+                    this.cid = "";
+                    this.avatar = "";
+                    this.username = "";
+                    this.email = "";
+                    this.role = 0;
+                    reLaunch({
+                        name: "signin",
+                    });
                 });
-            });
+            } else {
+                return Promise.resolve();
+            }
         },
         login(param: LoginParam): Promise<void> {
             const userInfo = Local.get("userInfo") as Partial<User> | null;
@@ -121,25 +132,33 @@ export const useUserStore = defineStore("user", {
             }
         },
         handleRefreshToken() {
+            if (this.isRefreshed) {
+                this.logout();
+            }
             uni.showLoading({
                 title: "登陆中,请稍后...",
                 mask: true,
             });
-            return AuthModel.refreshToken().then((res) => {
-                const uInfo = res.data;
-                this.token = uInfo.token;
-                this.refreshToken = uInfo.refreshToken;
-                this.cid = uInfo.cid;
-                this.avatar = uInfo.avatar;
-                this.username = uInfo.username;
-                this.email = uInfo.email;
-                this.role = uInfo.role;
-                Local.set("userInfo", {
-                    ...this.$state,
+            this.isRefreshed = true;
+            return AuthModel.refresh()
+                .then((res) => {
+                    const uInfo = res.data;
+                    this.token = uInfo.token;
+                    this.refreshToken = uInfo.refreshToken;
+                    this.cid = uInfo.cid;
+                    this.avatar = uInfo.avatar;
+                    this.username = uInfo.username;
+                    this.email = uInfo.email;
+                    this.role = uInfo.role;
+                    Local.set("userInfo", {
+                        ...this.$state,
+                    });
+                    this.setUserInfo(this.$state);
+                    uni.hideLoading();
+                })
+                .catch(() => {
+                    this.logout();
                 });
-                this.setUserInfo(this.$state);
-                uni.hideLoading();
-            });
         },
     },
 });

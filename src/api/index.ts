@@ -44,6 +44,12 @@ export const UserModel: ApiModel = {
         const store = useUserStore();
         return put("/user/", { cid: store.cid, ...data });
     },
+    getUserList(data) {
+        return post("/user/get", data);
+    },
+    setPermission(data) {
+        return put("/user/permission", data);
+    },
 };
 
 export const PetModel: ApiModel = {

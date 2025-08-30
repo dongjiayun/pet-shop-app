@@ -139,7 +139,6 @@ const responseInterceptorsResolve = async <T = any>(
 
     const status = error.code || 500;
     const response = error.response || {};
-    const contentType = response.header?.["content-type"] || "";
 
     if (status === 401) {
         const store = useUserStore();
@@ -147,7 +146,7 @@ const responseInterceptorsResolve = async <T = any>(
         if (store.refreshToken || userinfo?.refreshToken) {
             store.handleRefreshToken();
         } else {
-            push("signin");
+            store.logout();
         }
         return Promise.reject({ code: status, response } as ErrorResponse);
     }
@@ -190,6 +189,8 @@ const responseInterceptorsReject = (
     }
 
     if (errCode === 401 || errCode === 403) {
+        const store = useUserStore();
+        store.logout();
         if (config?.logoutDisabled) {
             console.log("登陆超时,请重新登陆");
             return Promise.reject(error);

@@ -25,6 +25,9 @@
                 },
                 {
                     "path": "resetPassword"
+                },
+                {
+                    "path": "authorization"
                 }
             ]
         },
@@ -118,6 +121,10 @@
             {
                 "name": "宠物列表",
                 "path": "pages/pet/index"
+            },
+            {
+                "name": "个人中心",
+                "path": "pages/index/mine"
             }
         ]
     }

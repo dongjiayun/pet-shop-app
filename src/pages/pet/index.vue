@@ -6,6 +6,14 @@ import { ref, onMounted } from "vue";
 import GenderIcon from "@/components/common/genderIcon.vue";
 import { getDictNameById } from "@/utils";
 import { push } from "@/router/router";
+import { useUserStore } from "@/stores/user";
+
+const props = defineProps({
+    isSelf: {
+        type: Boolean,
+        default: false,
+    },
+});
 
 const search = ref("");
 
@@ -37,7 +45,12 @@ const getPetList = (pageNo = 1, pageSize = 20) => {
         pageNo,
         pageSize,
         keyword: search.value,
+        cid: "",
     };
+    if (props.isSelf) {
+        const store = useUserStore();
+        params.cid = store.cid;
+    }
     PetModel.getList(params).then((res) => {
         if (res.status !== 0) {
             uni.showToast({
@@ -150,7 +163,7 @@ onMounted(() => {
         padding: 28rpx 32rpx;
         display: flex;
         align-items: center;
-        border-bottom: 2rpx solid #f5e7eb;
+        border-bottom: 4rpx solid #ffecf5;
         &-avatar {
             width: 96rpx;
             height: 96rpx;

@@ -2,9 +2,9 @@
 import PetContainer from "@/components/common/petContainer.vue";
 import avatar from "./components/avatar.vue";
 import imageUploadPopup from "@/components/common/imageUploadPopup.vue";
-import { onLoad } from "@dcloudio/uni-app";
+import { onLoad, onShow } from "@dcloudio/uni-app";
 import { PetModel, UploadModel } from "@/api";
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { baseUrl } from "@/config";
 import genderIcon from "@/components/common/genderIcon.vue";
 import PetDivider from "@/components/common/petDivider.vue";
@@ -108,7 +108,7 @@ const handleEntrustmentInfo = () => {
     });
 };
 
-onMounted(() => {
+onShow(() => {
     getPetDetail();
 });
 </script>

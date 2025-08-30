@@ -24,7 +24,6 @@ const handleDelete = (key) => {
 };
 
 const handlePreview = (key) => {
-    console.log(key);
     uni.previewImage({
         urls: lists.value,
         current: key,
