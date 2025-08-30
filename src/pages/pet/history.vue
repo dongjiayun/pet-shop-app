@@ -49,9 +49,9 @@ const getHistoryList = () => {
             .map((i) => {
                 return {
                     leftTime: dayjs(i.editTime).format("YYYY-MM-DD HH:mm:ss"),
-                    leftTitle: i.type === 0 ? "新建" : "编辑",
+                    leftTitle: i.type === "0" ? "新建" : "编辑",
                     title: `${i.editName}(${i.editEmail})`,
-                    content: `${i.editName} 于 ${dayjs(i.editTime).format("YYYY-MM-DD HH:mm:ss")} ${i.type === 0 ? "新建" : "编辑"}了该宠物的 ${i.pet ? "基本档案" : i.petWashRecord ? "洗美档案" : i.petEntrustment ? "寄养档案" : ""}`,
+                    content: `${i.editName} 于 ${dayjs(i.editTime).format("YYYY-MM-DD HH:mm:ss")} ${i.type === "0" ? "新建" : "编辑"}了该宠物的 ${i.pet ? "基本档案" : i.petWashRecord ? "洗美档案" : i.petEntrustment ? "寄养档案" : ""}`,
                     sub: "点击查看详情",
                     color: i.pet
                         ? "#D4C800"

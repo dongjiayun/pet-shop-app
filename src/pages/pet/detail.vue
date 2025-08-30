@@ -146,7 +146,7 @@ onShow(() => {
                     <view
                         class="pet-detail-row-small-item"
                         :style="{
-                            background: `url(/static/bg/detail_bg2.png) no-repeat center center / cover`,
+                            background: `url(/static/bg/detail_bg3.png) no-repeat center center / cover`,
                         }"
                         @click="handleWashInfo"
                     >
@@ -164,7 +164,7 @@ onShow(() => {
                     <view
                         class="pet-detail-row-item"
                         :style="{
-                            background: `url(/static/bg/detail_bg3.png) no-repeat center center / cover`,
+                            background: `url(/static/bg/detail_bg2.png) no-repeat center center / cover`,
                         }"
                         @click="handleEntrustmentInfo"
                     >

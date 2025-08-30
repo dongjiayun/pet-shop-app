@@ -254,63 +254,71 @@ const handleSubmit = () => {
             icon: "none",
         });
     }
-    formRef.value.validate().then(() => {
-        uni.showLoading({
-            title: "请稍后",
-        });
-        UploadModel.uploadPic({
-            file: form.value.avatar,
-        })
-            .then((res) => {
-                console.log(res, res.status, typeof res);
-                if (res.status === 0) {
-                    form.value.avatar = baseUrl + res.data;
-                    formData.value = {
-                        ...formData.value,
-                        avatar: form.value.avatar,
-                        customerNickname: form.value.customerNickname,
-                        tailNumber: form.value.tailNumber,
-                        nickname: form.value.nickname,
-                        birthday: form.value.birthday,
-                        weight: form.value.weight,
-                        isSterilized: form.value.isSterilized,
-                        aggressive: form.value.aggressive,
-                        remark: form.value.remark,
-                        diagnosisHistory: form.value.diagnosisHistory,
-                        forbiden: form.value.forbiden,
-                    };
-                    PetModel.createPet(formData.value)
-                        .then((res) => {
-                            if (res.code === 0) {
-                                setTimeout(() => {
-                                    uni.showToast({
-                                        title: "新建成功",
-                                        icon: "none",
-                                    });
-                                }, 500);
-                                push({
-                                    name: "petDetail",
-                                    query: {
-                                        petId: res.data.id,
-                                    },
-                                });
-                            }
-                        })
-                        .finally(() => {
-                            uni.hideLoading();
-                        });
-                } else {
-                    uni.showToast({
-                        title: res.message,
-                        icon: "none",
-                    });
-                    uni.hideLoading();
-                }
-            })
-            .catch(() => {
-                uni.hideLoading();
+    formRef.value
+        .validate()
+        .then(() => {
+            uni.showLoading({
+                title: "请稍后",
             });
-    });
+            UploadModel.uploadPic({
+                file: form.value.avatar,
+            })
+                .then((res) => {
+                    console.log(res, res.status, typeof res);
+                    if (res.status === 0) {
+                        form.value.avatar = baseUrl + res.data;
+                        formData.value = {
+                            ...formData.value,
+                            avatar: form.value.avatar,
+                            customerNickname: form.value.customerNickname,
+                            tailNumber: form.value.tailNumber,
+                            nickname: form.value.nickname,
+                            birthday: form.value.birthday,
+                            weight: form.value.weight,
+                            isSterilized: form.value.isSterilized,
+                            aggressive: form.value.aggressive,
+                            remark: form.value.remark,
+                            diagnosisHistory: form.value.diagnosisHistory,
+                            forbiden: form.value.forbiden,
+                        };
+                        PetModel.createPet(formData.value)
+                            .then((res) => {
+                                if (res.status === 0) {
+                                    setTimeout(() => {
+                                        uni.showToast({
+                                            title: "新建成功",
+                                            icon: "none",
+                                        });
+                                        push({
+                                            name: "petDetail",
+                                            query: {
+                                                petId: res.data.id,
+                                            },
+                                        });
+                                    }, 500);
+                                }
+                            })
+                            .finally(() => {
+                                uni.hideLoading();
+                            });
+                    } else {
+                        uni.showToast({
+                            title: res.message,
+                            icon: "none",
+                        });
+                        uni.hideLoading();
+                    }
+                })
+                .catch(() => {
+                    uni.hideLoading();
+                });
+        })
+        .catch((e) => {
+            uni.showToast({
+                title: e?.[0].errorMessage,
+                icon: "none",
+            });
+        });
 };
 </script>
 

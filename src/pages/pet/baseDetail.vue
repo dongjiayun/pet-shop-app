@@ -183,38 +183,46 @@ const reverseDict = (dict) => {
 };
 
 const handleSubmit = () => {
-    formRef.value.validate().then(() => {
-        uni.showLoading({
-            title: "请稍后",
-        });
-        formData.value = {
-            ...formData.value,
-            nickname: form.value.nickname,
-            birthday: form.value.birthday,
-            weight: form.value.weight,
-            isSterilized: form.value.isSterilized,
-            aggressive: form.value.aggressive,
-            remark: form.value.remark,
-            diagnosisHistory: form.value.diagnosisHistory,
-            forbiden: form.value.forbiden,
-        };
-        PetModel.updatePet(formData.value)
-            .then((res) => {
-                if (res.status === 0) {
-                    setTimeout(() => {
-                        uni.showToast({
-                            title: "修改成功",
-                            icon: "none",
-                        });
-                    }, 500);
-                    isEdit.value = false;
-                    getPetDetail();
-                }
-            })
-            .finally(() => {
-                uni.hideLoading();
+    formRef.value
+        .validate()
+        .then(() => {
+            uni.showLoading({
+                title: "请稍后",
             });
-    });
+            formData.value = {
+                ...formData.value,
+                nickname: form.value.nickname,
+                birthday: form.value.birthday,
+                weight: form.value.weight,
+                isSterilized: form.value.isSterilized,
+                aggressive: form.value.aggressive,
+                remark: form.value.remark,
+                diagnosisHistory: form.value.diagnosisHistory,
+                forbiden: form.value.forbiden,
+            };
+            PetModel.updatePet(formData.value)
+                .then((res) => {
+                    if (res.status === 0) {
+                        setTimeout(() => {
+                            uni.showToast({
+                                title: "修改成功",
+                                icon: "none",
+                            });
+                        }, 500);
+                        isEdit.value = false;
+                        getPetDetail();
+                    }
+                })
+                .finally(() => {
+                    uni.hideLoading();
+                });
+        })
+        .catch((e) => {
+            uni.showToast({
+                title: e?.[0].errorMessage,
+                icon: "none",
+            });
+        });
 };
 
 const handleEdit = () => {

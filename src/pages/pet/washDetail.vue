@@ -55,6 +55,7 @@ const getPetDetail = () => {
     if (isHistory.value) {
         const store = useAppStore();
         form.value = store.historyCache;
+        uploadPicsRef.value.uploadPics(form.value.attachments);
         return;
     }
     PetWashRecordModel.getPetWashRecord(petId.value).then((res) => {
@@ -83,68 +84,76 @@ const reverseDict = (dict) => {
 };
 
 const handleSubmit = () => {
-    formRef.value.validate().then(async () => {
-        uni.showLoading({
-            title: "请稍后",
-        });
-        if (!Array.isArray(form.value.attachments)) {
-            form.value.attachments = [];
-        }
-        const uploadLists = form.value.attachments.map((item: string) => {
-            return new Promise((resolve) => {
-                if (item.includes(baseUrl)) {
-                    resolve(item);
-                } else {
-                    UploadModel.uploadPic({
-                        file: item,
-                    }).then((res) => {
-                        resolve(baseUrl + res.data);
+    formRef.value
+        .validate()
+        .then(async () => {
+            uni.showLoading({
+                title: "请稍后",
+            });
+            if (!Array.isArray(form.value.attachments)) {
+                form.value.attachments = [];
+            }
+            const uploadLists = form.value.attachments.map((item: string) => {
+                return new Promise((resolve) => {
+                    if (item.includes(baseUrl)) {
+                        resolve(item);
+                    } else {
+                        UploadModel.uploadPic({
+                            file: item,
+                        }).then((res) => {
+                            resolve(baseUrl + res.data);
+                        });
+                    }
+                });
+            });
+            let attachments = [];
+            await Promise.all(uploadLists).then((res) => {
+                attachments = res || [];
+            });
+            form.value.attachments = attachments || [];
+            form.value.petId = petId.value;
+            if (isCreate.value) {
+                PetWashRecordModel.createPetWashRecord(form.value)
+                    .then((res) => {
+                        if (res.status === 0) {
+                            setTimeout(() => {
+                                uni.showToast({
+                                    title: "创建成功",
+                                    icon: "none",
+                                });
+                            }, 500);
+                            isEdit.value = false;
+                            getPetDetail();
+                        }
+                    })
+                    .finally(() => {
+                        uni.hideLoading();
                     });
-                }
+            } else {
+                PetWashRecordModel.updatePetWashRecord(form.value)
+                    .then((res) => {
+                        if (res.status === 0) {
+                            setTimeout(() => {
+                                uni.showToast({
+                                    title: "修改成功",
+                                    icon: "none",
+                                });
+                            }, 500);
+                            isEdit.value = false;
+                            getPetDetail();
+                        }
+                    })
+                    .finally(() => {
+                        uni.hideLoading();
+                    });
+            }
+        })
+        .catch((e) => {
+            uni.showToast({
+                title: e?.[0].errorMessage,
+                icon: "none",
             });
         });
-        let attachments = [];
-        await Promise.all(uploadLists).then((res) => {
-            attachments = res || [];
-        });
-        form.value.attachments = attachments || [];
-        form.value.petId = petId.value;
-        if (isCreate.value) {
-            PetWashRecordModel.createPetWashRecord(form.value)
-                .then((res) => {
-                    if (res.status === 0) {
-                        setTimeout(() => {
-                            uni.showToast({
-                                title: "创建成功",
-                                icon: "none",
-                            });
-                        }, 500);
-                        isEdit.value = false;
-                        getPetDetail();
-                    }
-                })
-                .finally(() => {
-                    uni.hideLoading();
-                });
-        } else {
-            PetWashRecordModel.updatePetWashRecord(form.value)
-                .then((res) => {
-                    if (res.status === 0) {
-                        setTimeout(() => {
-                            uni.showToast({
-                                title: "修改成功",
-                                icon: "none",
-                            });
-                        }, 500);
-                        isEdit.value = false;
-                        getPetDetail();
-                    }
-                })
-                .finally(() => {
-                    uni.hideLoading();
-                });
-        }
-    });
 };
 
 const handleEdit = () => {

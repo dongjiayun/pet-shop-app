@@ -160,7 +160,7 @@ const handleChooseImage = (files) => {
                 v-if="[1, 2, 3].includes(store.role)"
             >
                 <image src="@/assets/icons/myCustomer.png" class="mine-list-item-icon"></image>
-                <view class="mine-list-item-label">我相关的宠物</view>
+                <view class="mine-list-item-label">与我相关的宠物</view>
                 <image src="@/assets/icons/left.png" class="mine-list-item-right"></image>
             </view>
             <view class="mine-list-item" v-if="[2, 3].includes(store.role)" @click="handleHistory">
