@@ -137,6 +137,16 @@ onMounted(() => {
                                 is-bg
                                 :gender="item.gender === '0' ? 'male' : 'female'"
                             ></gender-icon>
+                            <view
+                                class="pet-list-item-info-row-aggressive"
+                                v-if="item.aggressive === '1'"
+                                >攻击性</view
+                            >
+                            <view
+                                class="pet-list-item-info-row-diagnosed"
+                                v-if="item.diagnosisHistory !== ''"
+                                >疾病史</view
+                            >
                         </view>
                         <view class="pet-list-item-info-row">
                             <view class="pet-list-item-info-row-type">{{
@@ -225,6 +235,36 @@ onMounted(() => {
                     letter-spacing: 0%;
                     text-align: center;
                     color: #48423680;
+                }
+                &-aggressive {
+                    font-family: PingFang SC;
+                    font-weight: 400;
+                    font-style: Regular;
+                    font-size: 24rpx;
+                    leading-trim: NONE;
+                    letter-spacing: -2%;
+                    text-align: center;
+                    vertical-align: middle;
+                    color: #fff;
+                    background: #f56c6c;
+                    padding: 4rpx 8rpx;
+                    border-radius: 12rpx;
+                    margin-left: 12rpx;
+                }
+                &-diagnosed {
+                    font-family: PingFang SC;
+                    font-weight: 400;
+                    font-style: Regular;
+                    font-size: 24rpx;
+                    leading-trim: NONE;
+                    letter-spacing: -2%;
+                    text-align: center;
+                    vertical-align: middle;
+                    color: #fff;
+                    background: #e6a23c;
+                    padding: 4rpx 8rpx;
+                    border-radius: 12rpx;
+                    margin-left: 12rpx;
                 }
             }
             &-row + &-row {

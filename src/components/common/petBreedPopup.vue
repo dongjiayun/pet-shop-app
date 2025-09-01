@@ -61,7 +61,7 @@ const getBreedList = () => {
         breedList.value?.push({
             type: "others",
             name: "其他",
-            breeds: [{ id: "999999", name: "异宠请在备注中说明" }],
+            breeds: [{ id: 999999, name: "异宠请在备注中说明" }],
         });
     });
 };

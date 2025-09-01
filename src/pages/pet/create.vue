@@ -289,13 +289,13 @@ const handleSubmit = () => {
                                             title: "新建成功",
                                             icon: "none",
                                         });
-                                        push({
-                                            name: "petDetail",
-                                            query: {
-                                                petId: res.data.id,
-                                            },
-                                        });
                                     }, 500);
+                                    push({
+                                        name: "petDetail",
+                                        query: {
+                                            petId: res.data.petId,
+                                        },
+                                    });
                                 }
                             })
                             .finally(() => {
