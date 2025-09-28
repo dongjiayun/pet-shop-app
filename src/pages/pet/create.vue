@@ -450,10 +450,11 @@ const handleSubmit = () => {
                             validateTrigger="blur"
                         />
                     </uni-forms-item>
-                    <uni-forms-item label="禁忌点" name="forbiden">
+                    <uni-forms-item label="禁忌点 (客户相关要求备注尽量都填在这里)" name="forbiden">
                         <uni-easyinput
                             :inputBorder="false"
-                            type="text"
+                            type="textarea"
+                            auto-height
                             v-model="form.forbiden"
                             placeholder="请输入禁忌点"
                             primaryColor="#0000001A"
@@ -482,10 +483,14 @@ const handleSubmit = () => {
                             ></uni-data-checkbox>
                         </view>
                     </uni-forms-item>
-                    <uni-forms-item label="备注" name="forbiden">
+                    <uni-forms-item
+                        label="备注 (品种如选'其他',此空仅填品种,此外勿填)"
+                        name="forbiden"
+                    >
                         <uni-easyinput
                             :inputBorder="false"
-                            type="text"
+                            type="textarea"
+                            auto-height
                             v-model="form.remark"
                             placeholder="请输入备注"
                             primaryColor="#0000001A"
