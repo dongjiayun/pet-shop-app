@@ -40,11 +40,13 @@ defineExpose({ uploadPics });
         <view class="upload-pics-list">
             <view v-for="(item, key) in lists" :key="key" class="upload-pics-list-item">
                 <image
+                    mode="aspectFill"
                     class="upload-pics-list-item-image"
                     @click="handlePreview(key)"
                     :src="item"
                 ></image>
                 <image
+                    mode="aspectFill"
                     v-if="isEdit"
                     class="upload-pics-list-item-delete"
                     src="@/assets/icons/delete.png"

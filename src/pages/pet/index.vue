@@ -126,6 +126,7 @@ onMounted(() => {
                 >
                     <view class="pet-list-item-avatar">
                         <image
+                            mode="aspectFill"
                             :src="item.avatar || '/static/icons/pet_avatar.png'"
                             class="pet-list-item-avatar-image"
                         ></image>
@@ -155,7 +156,9 @@ onMounted(() => {
                             <view class="pet-list-item-info-row-breed"
                                 >|
                                 {{
-                                    item.breed.name === "其他" ? item.breed.remark : item.breed.name
+                                    [99999, 199999, 299999].includes(item.breed.id)
+                                        ? item.remark
+                                        : item.breed.name
                                 }}</view
                             >
                         </view>

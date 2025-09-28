@@ -14,7 +14,7 @@ const effectiveImage = computed(() => {
 
 <template>
     <view class="pet-avatar">
-        <image class="pet-avatar-image" :src="effectiveImage"></image>
+        <image mode="aspectFill" class="pet-avatar-image" :src="effectiveImage"></image>
         <view class="pet-avatar-edit">
             <image class="pet-avatar-edit-icon" src="@/assets/icons/edit.png"></image>
         </view>

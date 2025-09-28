@@ -120,7 +120,19 @@ onShow(() => {
                 <avatar :image="petInfo.avatar"></avatar>
                 <view class="profile-label">
                     <view>{{ petInfo.nickName }}</view>
-                    <gender-icon :gender="petInfo.gender === '0' ? 'male' : 'female'"></gender-icon>
+                    <view style="display: flex; align-items: center; justify-content: center">
+                        <gender-icon
+                            :gender="petInfo.gender === '0' ? 'male' : 'female'"
+                        ></gender-icon>
+                        <text style="color: #48423680; font-size: 20rpx">
+                            |
+                            {{
+                                [99999, 199999, 299999].includes(petInfo.breed.id)
+                                    ? petInfo.remark
+                                    : petInfo.breed.name
+                            }}</text
+                        >
+                    </view>
                 </view>
             </view>
             <pet-divider></pet-divider>
