@@ -39,7 +39,10 @@ const handleSubmit = () => {
                 uni.showToast({
                     title: "修改成功",
                 });
-                userStore.setUserInfo(res.data);
+                userStore.setUserInfo({
+                    ...res.data,
+                    avatar: res.data.avatar?.fileUrl,
+                });
             }
         });
     });

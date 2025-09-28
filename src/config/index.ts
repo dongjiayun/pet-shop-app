@@ -10,15 +10,14 @@ interface Config {
 
 const CONFIG: Config = {
     development: {
-        baseUrl: "http://127.0.0.1:2088",
+        baseUrl: "https://api.birkinpet.cn",
     },
     production: {
-        baseUrl: "http://127.0.0.1:2088",
+        baseUrl: "https://api.birkinpet.cn",
     },
 };
 
-const env = import.meta.env;
-const envName = env.VITE_USER_NODE_ENV?.NODE_ENV || "development";
+const envName = process.env.NODE_ENV || "development";
 
 // 确保环境名称有效，默认为development
 const validEnvName = CONFIG[envName] ? envName : "development";

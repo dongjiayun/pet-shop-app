@@ -138,6 +138,8 @@ onShow(() => {
         redirectTo({
             name: "signin",
         });
+    } else {
+        store.getUserInfo();
     }
 });
 </script>

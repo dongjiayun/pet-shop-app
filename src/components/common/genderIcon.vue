@@ -13,7 +13,7 @@ const props = defineProps({
 
 <template>
     <view class="gender-icon" :class="{ [gender]: true, isBg }">
-        {{ gender === "male" ? "♂ 弟弟" : "♀ 妹妹" }}
+        {{ gender === "male" ? "弟弟" : "妹妹" }}
     </view>
 </template>
 
@@ -22,9 +22,12 @@ const props = defineProps({
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
     border-radius: 20rpx;
     font-size: 28rpx;
     padding: 4rpx 10rpx;
+    box-sizing: border-box;
     &.male {
         color: #1e9dff;
         &.isBg {

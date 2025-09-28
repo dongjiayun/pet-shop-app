@@ -22,6 +22,11 @@ import { useUserStore } from "@/stores/user";
 import { computed } from "vue";
 import { push } from "@/router/router";
 
+uni.showShareMenu({
+    withShareTicket: true,
+    menus: ["shareAppMessage", "shareTimeline"],
+});
+
 const store = useUserStore();
 
 const isEmployee = computed(() => {

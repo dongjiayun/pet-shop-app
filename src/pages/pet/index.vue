@@ -153,7 +153,10 @@ onMounted(() => {
                                 getDictNameById(dicts.type, item.type)
                             }}</view>
                             <view class="pet-list-item-info-row-breed"
-                                >| {{ item.breed.name }}</view
+                                >|
+                                {{
+                                    item.breed.name === "其他" ? item.breed.remark : item.breed.name
+                                }}</view
                             >
                         </view>
                     </view>
@@ -240,7 +243,7 @@ onMounted(() => {
                     font-family: PingFang SC;
                     font-weight: 400;
                     font-style: Regular;
-                    font-size: 24rpx;
+                    font-size: 18rpx;
                     leading-trim: NONE;
                     letter-spacing: -2%;
                     text-align: center;
@@ -248,14 +251,14 @@ onMounted(() => {
                     color: #fff;
                     background: #f56c6c;
                     padding: 4rpx 8rpx;
-                    border-radius: 12rpx;
+                    border-radius: 16rpx;
                     margin-left: 12rpx;
                 }
                 &-diagnosed {
                     font-family: PingFang SC;
                     font-weight: 400;
                     font-style: Regular;
-                    font-size: 24rpx;
+                    font-size: 18rpx;
                     leading-trim: NONE;
                     letter-spacing: -2%;
                     text-align: center;
@@ -263,7 +266,7 @@ onMounted(() => {
                     color: #fff;
                     background: #e6a23c;
                     padding: 4rpx 8rpx;
-                    border-radius: 12rpx;
+                    border-radius: 16rpx;
                     margin-left: 12rpx;
                 }
             }

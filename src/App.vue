@@ -5,9 +5,6 @@ import { reLaunch } from "@/router/router";
 
 onLaunch(() => {
     console.log("App Launch");
-});
-onShow(() => {
-    console.log("App Show");
     const store = useUserStore();
     store.setUserInfo();
     if (!store.token) {
@@ -17,6 +14,9 @@ onShow(() => {
     } else {
         store.getUserInfo();
     }
+});
+onShow(() => {
+    console.log("App Show");
 });
 onHide(() => {
     console.log("App Hide");
