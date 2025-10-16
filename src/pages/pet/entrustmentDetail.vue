@@ -152,12 +152,12 @@ const handleChooseImage = () => {
 };
 
 const handleSubmitChooseImage = (files) => {
-    form.value.attachments = files;
-    uploadPicsRef.value.uploadPics(files);
+    form.value.attachments = [...form.value.attachments, ...files];
+    uploadPicsRef.value.uploadPics(form.value.attachments);
 };
 
 const handleUpdatePics = (files) => {
-    form.value.attachments = files;
+    form.value.attachments = [...form.value.attachments, ...files];
 };
 
 onMounted(() => {

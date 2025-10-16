@@ -166,12 +166,12 @@ const handleChooseImage = () => {
 };
 
 const handleSubmitChooseImage = (files) => {
-    form.value.attachments = files;
-    uploadPicsRef.value.uploadPics(files);
+    form.value.attachments = [...form.value.attachments, ...files];
+    uploadPicsRef.value.uploadPics(form.value.attachments);
 };
 
 const handleUpdatePics = (files) => {
-    form.value.attachments = files;
+    form.value.attachments = [...form.value.attachments, ...files];
 };
 
 onMounted(() => {
@@ -243,7 +243,8 @@ onMounted(() => {
                     <uni-forms-item label="洗护香波配比" name="shapooProportion">
                         <uni-easyinput
                             :inputBorder="false"
-                            type="text"
+                            type="textarea"
+                            auto-height
                             v-model="form.shapooProportion"
                             :disabled="!isEdit"
                             :placeholder="isEdit ? '请输入洗护香波配比' : '-'"

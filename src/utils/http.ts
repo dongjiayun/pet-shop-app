@@ -64,10 +64,14 @@ export const request = <T = any>(
         data = objectTreeShake(data);
     }
 
-    uni.showLoading({
-        title: "加载中...",
-        mask: true,
-    });
+    let loadingHasShowed = false;
+    const showLoadingSetTimeout = setTimeout(() => {
+        uni.showLoading({
+            title: "加载中...",
+            mask: true,
+        });
+        loadingHasShowed = true;
+    }, 500);
 
     return new Promise((resolve, reject) => {
         if (config?.contentType === "multipart/form-data") {
@@ -93,9 +97,10 @@ export const request = <T = any>(
                     responseInterceptorsReject(err, url, config).then(resolve).catch(reject);
                 },
                 complete: () => {
-                    setTimeout(() => {
+                    if (loadingHasShowed) {
                         uni.hideLoading();
-                    }, 200);
+                    }
+                    clearTimeout(showLoadingSetTimeout);
                 },
             });
         } else {
@@ -120,9 +125,10 @@ export const request = <T = any>(
                     responseInterceptorsReject(err, url, config).then(resolve).catch(reject);
                 },
                 complete: () => {
-                    setTimeout(() => {
+                    if (loadingHasShowed) {
                         uni.hideLoading();
-                    }, 200);
+                    }
+                    clearTimeout(showLoadingSetTimeout);
                 },
             });
         }

@@ -51,9 +51,7 @@ const getStaffList = (pageNo = 1, pageSize = 20) => {
             return Promise.reject(new Error(res.message));
         }
         const list = res.data.list;
-        if (Array.isArray(list)) {
-            pagingRef.value.complete(list);
-        }
+        pagingRef.value.complete(list);
     });
 };
 
